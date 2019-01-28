@@ -8,16 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class Score
+ * Servlet implementation class User
  */
-@WebServlet("/Score")
-public class Score extends HttpServlet {
+@WebServlet("/User")
+public class User extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String VUE = "/WEB-INF/jsp/User.jsp";
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Score() {
+    public User() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -27,7 +28,8 @@ public class Score extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+
 	}
 
 	/**
