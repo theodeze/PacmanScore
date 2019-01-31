@@ -29,13 +29,29 @@
      
       
     	<!-- Bouton pour la Connexion/Première Connexion/Déconnexion -->
-    
-      <form class="form-inline my-2 my-md-0">
-     
-	        <a class="btn btn-info" href="<c:url value="/connexion"/>">SE CONNECTER</a>
     	
-      </form>
-            
+    	<div id="app-co">
+		
+		<div v-if=v1>
+			     	<div class="btn-group" role="group">
+		
+    	<div id="creat">
+    	<div class="pr-2"><button v-on:click="creat" class="btn btn-info" type="submit" >Créer Compte</button></div>
+    	</div>
+    	    			<div id="conn">
+    	
+		<div class="pl-2"><button v-on:click="conn" class="btn btn-success" type="submit">SE CONNECTER</button></div> 
+		</div>
+		</div>        	       
+		</div>
+	            
+	        <div v-if=v2> 
+	     	<div class="btn-group" role="group">
+	              <div class="pr-2"><button class="btn btn-info" type="submit">Modifier Compte</button></div>         
+	              <div class="pl-2"><button class="btn btn-danger" type="submit">SE DECONNECTER</button></div>
+	     </div> 
+	     </div>  
+	     </div> 
     </div>     
   </div>
 </nav>
