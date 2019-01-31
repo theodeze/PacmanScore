@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class DAOFactory {
 
-    private static final String FICHIER_PROPERTIES       = "/fr/univangers/pacman/score/dao/DAO.properties";
+    private static final String FICHIER_PROPERTIES       = "fr/univangers/pacman/score/dao/DAO.properties";
     private static final String PROPERTY_URL             = "url";
     private static final String PROPERTY_DRIVER          = "driver";
     private static final String PROPERTY_NOM_UTILISATEUR = "nomutilisateur";
@@ -35,7 +35,7 @@ public class DAOFactory {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream fichierProperties = classLoader.getResourceAsStream(FICHIER_PROPERTIES);
         
-        if (fichierProperties == null) {
+        if(fichierProperties == null) {
             throw new DAOConfigurationException("Le fichier properties " + FICHIER_PROPERTIES + " est introuvable.");
         }
 
@@ -45,13 +45,13 @@ public class DAOFactory {
             driver = properties.getProperty(PROPERTY_DRIVER);
             nomUtilisateur = properties.getProperty(PROPERTY_NOM_UTILISATEUR);
             motDePasse = properties.getProperty(PROPERTY_MOT_DE_PASSE);
-        } catch (IOException e) {
+        } catch(IOException e) {
             throw new DAOConfigurationException("Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e);
         }
         
         try {
             Class.forName(driver);
-        } catch (ClassNotFoundException e) {
+        } catch(ClassNotFoundException e) {
             throw new DAOConfigurationException("Le driver est introuvable dans le classpath.", e);
         }
         
@@ -64,4 +64,12 @@ public class DAOFactory {
         return DriverManager.getConnection(url, username, password);
     }
 	
+    public DAOUtilisateur getDaoUtilisateur() {
+        return new DAOUtilisateurImpl(this);
+    }
+	
+    public DAOPartie getDaoPartie() {
+        return new DAOPartieImpl(this);
+    }
+    
 }

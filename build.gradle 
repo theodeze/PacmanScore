@@ -1,0 +1,19 @@
+
+group = 'fr.univangers.pacman.score'
+version = '0.1'
+description = "Serveur de score pacman"
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+  compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
+  compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+}
