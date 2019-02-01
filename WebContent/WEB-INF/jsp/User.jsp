@@ -32,7 +32,7 @@
 				<h1>BIENVENUE SUR PACMAN SCORE</h1>
 			</div>
 
-			<div class="pt-4 pb-4 text-center"><img src="<c:url value="/img/Partie.png"/>" alt="Pacman"></div>
+			<div class="pt-4 pb-2 text-center"><img src="<c:url value="/img/Partie.png"/>" alt="Pacman"></div>
 
 
 			<!-- CONNEXION AU COMPTE / CREATION -->
@@ -85,11 +85,11 @@
 		<!-- Modification du profil -->
 
 		<div class="border border-info" v-if=v_modif>
+		
 			<div class="row justify-content-center">
-
-				<div class="col-md-3 pt-2 text-center"><button data-toggle="modal" data-target="#supprimer_compte" class="btn btn-danger"
-					 type="submit">SUPPRIMER COMPTE</button></div>
-			</div>
+		
+				<div class="col text-right"><button v-on:click="fermer_modification" class="btn btn-info">X</button></div>
+				</div>
 
 			<div class="row justify-content-center">
 
@@ -149,6 +149,9 @@
 						<button class="btn btn-info" type="submit">VALIDER</button>
 					</form>
 				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-3 pb-2 text-center"><button data-toggle="modal" data-target="#supprimer_compte" class="btn btn-danger" type="submit">SUPPRIMER COMPTE</button></div>
 			</div>
 		</div>
 
@@ -210,7 +213,7 @@
 			</div>
 		</div>
 
-		<div class="pb-4 text-center"><img src="<c:url value="/img/pacman.png"/>" alt="Personnages" width=500></div>
+		<div class="pb-4 pt-4 text-center"><img src="<c:url value="/img/pacman.png"/>" alt="Personnages" width=500></div>
 
 	</div>
 	<div class="modal" id="supprimer_compte">

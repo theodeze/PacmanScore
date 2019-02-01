@@ -8,8 +8,8 @@ var main = new Vue({
 		v2_account: false,
 		v1_tab: true,
 		v2_tab: false,
-		v1_connexion: true,
-		v2_connexion: false,
+		v1_connexion: false,
+		v2_connexion: true,
 		v_modif: false
 	},
 	methods: {
@@ -49,13 +49,11 @@ var main = new Vue({
 			this.v2_account = true;
 		},
 		modification: function () {
-			if (this.v_modif) {
-				this.v_modif = false;
-			}
-			else {
-				this.v_modif = true;
-			}
-		}
+			this.v_modif = true;
+		},
+		fermer_modification: function() {
+			this.v_modif = false;
+		}		
 	}
 });
 
