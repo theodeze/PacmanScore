@@ -17,6 +17,7 @@
     <script src="<c:url value="/js/bootstrap.min.js"/>"></script> 
     <script src="<c:url value="/js/vue.min.js"/>"></script>
    	<script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js"></script>
+   	<script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/locale/fr.js"></script>
 </head>
 
 <body>
@@ -24,13 +25,19 @@
 	<div id="main">
 		<c:import url="/jsp/Menu.jsp"/>
 		
+		
 		<div class="container-fluid justify-content-center mb-4">
-		    	<div class="pb-4 text-center" ><img src="<c:url value="/img/Partie.png"/>" alt="Pacman" ></div>
+		
+			<!-- TITRE PACMAN -->
+			
+			<div class="bg-info text-white text-center"><h1>BIENVENUE SUR PACMAN SCORE</h1></div>
+		
+		    	<div class="pt-4 pb-4 text-center" ><img src="<c:url value="/img/Partie.png"/>" alt="Pacman" ></div>
 		    	
 		    	
 		    	<!-- CONNEXION AU COMPTE / CREATION -->
-		    	
-		 <form id="divUser" class="form-signin" method="post" v-if=v2_account > 
+		   	
+		 <form id="divUser" class="form-signin border border-info" method="post" v-if=v2_account > 
 	          <div class="form-label-group">
 	            <input type="text" id="pseudo" name="Identifiant" class="form-control" required>
 	            <label for="identifiant">Pseudo</label>
@@ -43,19 +50,19 @@
 	              <button class="btn btn-info" type="submit">SE CONNECTER</button>
 		</form>
 		
-		<form id="User" class="form-signin" @submit.prevent="validateBeforeSubmit()" method="post" v-if=v1_account> 
+		<form id="User" class="form-signin border border-info" @submit.prevent="validateBeforeSubmit()" method="post" v-if=v1_account> 
 	          <div class="form-label-group">
 	            <input type="text" id="pseudo" name="Identifiant" class="form-control" required>
 	            <label for="pseudo">Pseudo</label>
 	          </div> 
 				
 				<div class="form-label-group">	    
-			      <input v-validate="'required'" id="pwd" name="password" type="password" class="form-control" ref="password" required>
+			      <input v-validate="'required'" id="pwd" name="password" type="password" class="form-control" data-vv-as="mot de passe" ref="password" required>
 			      <label for="pwd">Mot de Passe</label>
 				</div>
 
 				<div class="form-label-group">
-			      <input v-validate="'required|confirmed:password'" id="pwd_conf" name="password_confirmation" type="password" class="form-control" data-vv-as="password" required>
+			      <input v-validate="'required|confirmed:password'" id="pwd_conf" name="password_confirmation" type="password" class="form-control" data-vv-as="de confirmation" required>
 					<label for="pwd_conf">Confirmation</label>	      
 			  </div>
 			
@@ -70,14 +77,15 @@
      
 	            <button class="btn btn-info" type="submit">CRÉER COMPTE</button>
         </form>
+        </div>
         
         
         <!-- Modification du profil -->
         
-       <div class="border border-info">
+       <div class="border border-info" v-if=v_modif>
 		<div class="row justify-content-center"> 
        
-       <div class="col-md-3 pt-2 text-center"><button class="btn btn-danger" type="submit">SUPPRIMER COMPTE</button></div>
+       <div class="col-md-3 pt-2 text-center"><button data-toggle="modal" data-target="#supprimer_compte" class="btn btn-danger" type="submit">SUPPRIMER COMPTE</button></div>
        </div>
         
         <div class="row justify-content-center"> 
@@ -90,16 +98,16 @@
 	            <label for="identifiant">Pseudo</label>
 	          </div> 
 	          <div class="form-label-group">
-	            <input type="password" id="old_mdp" name="Old_MotDePasse" class="form-control" required>
+	            <input type="password" id="old_mdp" name="old_MotDePasse" class="form-control" required>
 	            <label for="old_mdp">Ancien Mot de passe</label>
 	          </div> 
 	          <div class="form-label-group">	    
-			      <input v-validate="'required'" id="pwd" name="password" type="password" class="form-control" ref="password" required>
-			      <label for="pwd">Mot de Passe</label>
+			      <input v-validate="'required'" id="pwd" name="password" type="password" class="form-control" data-vv-as="votre nouveau mot de passe" ref="password" required>
+			      <label for="pwd">Nouveau Mot de Passe</label>
 				</div>
 
 				<div class="form-label-group">
-			      <input v-validate="'required|confirmed:password'" id="pwd_conf" name="password_confirmation" type="password" class="form-control" data-vv-as="password" required>
+			      <input v-validate="'required|confirmed:password'" id="pwd_conf" name="password_confirmation" type="password" class="form-control" data-vv-as="de confirmation" required>
 					<label for="pwd_conf">Confirmation</label>	      
 			  </div>
 			
@@ -139,7 +147,7 @@
 		</div>
 		</div>
         
-        <div class="row justify-content-center pb-4 pt-4">
+        <div class="row justify-content-center pb-4 pt-4" v-if=v2_connexion>
 			
 			<div class="dropdown pr-1" id="show_gen" >
 				  <button v-on:click="show_gen" class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton_classement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -169,36 +177,73 @@
 			</div>
 		
 		 <div class="row justify-content-center pb-2" v-if=v1_tab>
-	        	<div class="col-md-2 table-bordered table_score">
+	        	<div class="col-md-3 table-bordered border-info table_score ">
 	        		<h5>Classement</h5>	        	
 	        	</div>
-	        	<div class="col-md-2 table-bordered table_score">
+	        	<div class="col-md-3 table-bordered border-info table_score">
 	        		<h5>Pseudo</h5>	        	
 	        	</div>
-	        	<div class="col-md-2 table-bordered table_score">
+	        	<div class="col-md-3 table-bordered border-info table_score">
 	        		<h5>Score total</h5>        	
 	        	</div>	        
 	        </div>
 	        
 	        <div class="row justify-content-center pb-2" v-if=v2_tab>
-	        	<div class="col-md-2 table-bordered table_score">
+	        	<div class="col-md-3 table-bordered border-info table_score">
 	        		<h5>Pseudo</h5>	        	
 	        	</div>
-	        	<div class="col-md-2 table-bordered table_score">
+	        	<div class="col-md-3 table-bordered border-info table_score">
 	        		<h5>Date</h5>	        	
 	        	</div>
-	        	<div class="col-md-2 table-bordered table_score">
+	        	<div class="col-md-3 table-bordered border-info table_score">
 	        		<h5>Score</h5>	        	
 	        	</div>
-	        	<div class="col-md-2 table-bordered table_score">
+	        	<div class="col-md-3 table-bordered border-info table_score">
 	        		<h5>Résultat de la partie</h5>	        	
 	        	</div> 	        
 	        </div>
+	        
+	        <div class="pb-4 text-center" ><img src="<c:url value="/img/pacman.png"/>" alt="Personnages" width=500></div>
 		
 		</div>      		
-		</div>
+		<div class="modal" id="supprimer_compte">
+			<div class="modal-dialog">
+			    <div class="modal-content">
+			    
+						      <!-- Modal Header -->
+				      <div class="modal-header">
+					        <h4 class="modal-title">SUPPRESSION DU COMPTE</h4>
+					       	<button type="button" class="close" data-dismiss="modal">&times;</button>
+				      </div>
+						
+						      <!-- Modal body -->
+				      <div class="modal-body">
+					      	 <label for =typePage>Êtes-vous vraiment sûr de vouloir supprimer votre compte ? </label>		     
+						     <form id="suppr_compte" class="form-signin" method="post" > 
+					          <div class="form-label-group">
+					            <input type="text" id="pseudo" name="Identifiant" class="form-control" required>
+					            <label for="pseudo">Pseudo</label>
+					          </div> 					          
+					          <div class="form-label-group">
+					            <input type="password" id="mdp" name="MotDePasse" class="form-control" required>
+					            <label for="mdp">Mot de passe</label>
+					          </div>
+					          </form>
+							     								    		        
+						      </div>
+						
+						      <!-- Modal footer -->
+						   	  <div class="modal-footer">
+						      	<button type="button" class="btn btn-outline-info" data-dismiss="modal">Valider</button>
+						        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Annuler</button>
+						      </div>
+						
+					</div>
+		  </div>
+</div>
+		
       
-      <script src="<c:url value="/js/vue.js"/>"></script>	
+      <script type="module" src="<c:url value="/js/vue.js"/>"></script>	
 
 </body>
 

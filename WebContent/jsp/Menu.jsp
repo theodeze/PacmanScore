@@ -46,7 +46,7 @@
 	            
 	        <div v-if=v2_connexion> 
 	     	<div class="btn-group" role="group">
-	              <div class="pr-2"><button class="btn btn-info" type="submit">Modifier Compte</button></div>         
+	              <div class="pr-2"><button v-on:click="modification" class="btn btn-info" type="submit">Modifier Compte</button></div>         
 	              <div class="pl-2"><button class="btn btn-danger" type="submit">SE DECONNECTER</button></div>
 	     </div> 
 	     </div>  

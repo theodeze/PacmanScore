@@ -1,81 +1,5 @@
-/**
- * 
- */
-Vue.use(VeeValidate);
 
-var show_tab = new Vue({
-	el: '#app-tab',
-	data:{
-		v1_tab: true,
-		v2_tab: false
-	},
-	
-	methods:{
-		show_gen:function(){
-			this.v1_tab = true;
-			this.v2_tab = false;
-		},
-		show_perso:function(){
-			this.v1_tab = false;
-			this.v2_tab = true;
-		}
-	}
-});
-
-var show_connexion = new Vue({
-	el: '#app-co',
-	data:{
-		v1_connexion: true,
-		v2_connexion: false
-	},
-	
-	methods:{
-		connexion:function(){
-			this.v1_connexion = true;
-			this.v2_connexion = false;
-		},
-		deconnexion:function(){
-			this.v1_connexion = false;
-			this.v2_connexion = true;
-		}
-	}
-});
-
-var vueMDP = new Vue({
-  el: '#app-user',
-  methods: {
-    validateBeforeSubmit() {
-      this.$validator
-        .validateAll()
-        .then(function(response) {
-          // Validation success if response === true
-        })
-        .catch(function(e) {
-          // Catch errors
-        })
-    }
-  }
-});
-
-
-var vueAccount = new Vue({
-	el: '#app-account',
-	data:{
-		v1_account: false,
-		v2_account: false
-	},	
-	methods:{
-		creat:function(){
-			this.v1_account = true;
-			this.v2_account = false;
-		},
-		conn:function(){
-			this.v1_account = false;
-			this.v2_account = true;
-		}
-	}	
-});
-
+Vue.use(VeeValidate,{locale: 'fr'});
 
 var main = new Vue({
 	el: '#main',
@@ -84,8 +8,9 @@ var main = new Vue({
 		v2_account: false,
 		v1_tab: true,
 		v2_tab: false,
-		v1_connexion: false,
-		v2_connexion: true
+		v1_connexion: true,
+		v2_connexion: false,
+		v_modif:false
 	},	
 	methods:{
 		show_gen:function(){
@@ -105,6 +30,7 @@ var main = new Vue({
 			this.v2_connexion = true;
 		},
 		 validateBeforeSubmit() {
+				this.$validator.localize('fr');
 		      this.$validator
 		        .validateAll()
 		        .then(function(response) {
@@ -121,8 +47,15 @@ var main = new Vue({
 		conn:function(){
 			this.v1_account = false;
 			this.v2_account = true;
+		},
+		modification:function(){
+			if(this.v_modif){
+				this.v_modif=false;
+			}
+			else{
+				this.v_modif=true;
+			}
 		}
-		
 	}	
 });
 
