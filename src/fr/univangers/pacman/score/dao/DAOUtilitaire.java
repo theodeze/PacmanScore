@@ -4,9 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.SQLException;
 
 public class DAOUtilitaire {
+	
+    private static final Logger LOGGER = LogManager.getLogger("DAO Utilitaire");
 
     private DAOUtilitaire() {}
     
@@ -15,7 +24,7 @@ public class DAOUtilitaire {
 	        try {
 	            resultSet.close();
 	        } catch(SQLException e) {
-	            System.out.println("Échec de la fermeture du ResultSet : " + e.getMessage());
+	        	LOGGER.warn("Échec de la fermeture du ResultSet : " + e.getMessage());
 	        }
 	    }
 	}
@@ -25,7 +34,7 @@ public class DAOUtilitaire {
 	        try {
 	            statement.close();
 	        } catch(SQLException e) {
-	            System.out.println("Échec de la fermeture du Statement : " + e.getMessage());
+	        	LOGGER.warn("Échec de la fermeture du Statement : " + e.getMessage());
 	        }
 	    }
 	}
@@ -35,7 +44,7 @@ public class DAOUtilitaire {
 	        try {
 	            connexion.close();
 	        } catch(SQLException e) {
-	            System.out.println("Échec de la fermeture de la connexion : " + e.getMessage());
+	        	LOGGER.warn("Échec de la fermeture de la connexion : " + e.getMessage());
 	        }
 	    }
 	}
@@ -57,6 +66,17 @@ public class DAOUtilitaire {
             preparedStatement.setObject(i + 1, objets[i]);
         }
         return preparedStatement;
+    }
+    
+    public static Timestamp parseDate(String date) {
+    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	long time = 0;
+    	try {
+    		time = formatter.parse(date).getTime();
+		} catch (ParseException e) {
+			LOGGER.warn("Problème format date");
+		}
+		return new Timestamp(time);
     }
 
 }

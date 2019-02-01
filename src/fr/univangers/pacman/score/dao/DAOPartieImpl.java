@@ -107,9 +107,8 @@ public class DAOPartieImpl implements DAOPartie {
 		partie.setScore(resultSet.getInt(COLUMN_SCORE));
 		partie.setVictoire(resultSet.getBoolean(COLUMN_VICTORY));
 	    partie.setPseudo(resultSet.getString(COLUMN_PSEUDO));
-	    partie.setDate(resultSet.getTimestamp(COLUMN_DATE));
+	    partie.setDate(parseDate(resultSet.getString(COLUMN_DATE)));
 	    return partie;
 	}
-
 	
 }

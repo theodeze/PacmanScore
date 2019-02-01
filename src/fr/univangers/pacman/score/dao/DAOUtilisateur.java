@@ -13,5 +13,6 @@ public interface DAOUtilisateur {
 	
     void creer(Utilisateur utilisateur) throws DAOException;
     Utilisateur trouver(String email) throws DAOException;
+    void supprimer(String email) throws DAOException;
 	
 }
