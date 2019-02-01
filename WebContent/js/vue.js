@@ -84,8 +84,8 @@ var main = new Vue({
 		v2_account: false,
 		v1_tab: true,
 		v2_tab: false,
-		v1_connexion: true,
-		v2_connexion: false
+		v1_connexion: false,
+		v2_connexion: true
 	},	
 	methods:{
 		show_gen:function(){

@@ -24,8 +24,12 @@
 	<div id="main">
 		<c:import url="/jsp/Menu.jsp"/>
 		
-		<div class="container-fluid text-center mb-4">
-		    	<div class="pb-4" style="text-align:center;"><img src="<c:url value="/img/Partie.png"/>" alt="Pacman" ></div>
+		<div class="container-fluid justify-content-center mb-4">
+		    	<div class="pb-4 text-center" ><img src="<c:url value="/img/Partie.png"/>" alt="Pacman" ></div>
+		    	
+		    	
+		    	<!-- CONNEXION AU COMPTE / CREATION -->
+		    	
 		 <form id="divUser" class="form-signin" method="post" v-if=v2_account > 
 	          <div class="form-label-group">
 	            <input type="text" id="pseudo" name="Identifiant" class="form-control" required>
@@ -67,7 +71,75 @@
 	            <button class="btn btn-info" type="submit">CRÉER COMPTE</button>
         </form>
         
-        <div class="row justify-content-center pb-4">
+        
+        <!-- Modification du profil -->
+        
+       <div class="border border-info">
+		<div class="row justify-content-center"> 
+       
+       <div class="col-md-3 pt-2 text-center"><button class="btn btn-danger" type="submit">SUPPRIMER COMPTE</button></div>
+       </div>
+        
+        <div class="row justify-content-center"> 
+        	
+       <div class="col-md-4 pt-2 text-center">
+       <h4>Modifier mot de passe</h4>
+         <form id="ModifMDP" class="form-signin" method="post" > 
+	          <div class="form-label-group">
+	            <input type="text" id="pseudo" name="Identifiant" class="form-control" required>
+	            <label for="identifiant">Pseudo</label>
+	          </div> 
+	          <div class="form-label-group">
+	            <input type="password" id="old_mdp" name="Old_MotDePasse" class="form-control" required>
+	            <label for="old_mdp">Ancien Mot de passe</label>
+	          </div> 
+	          <div class="form-label-group">	    
+			      <input v-validate="'required'" id="pwd" name="password" type="password" class="form-control" ref="password" required>
+			      <label for="pwd">Mot de Passe</label>
+				</div>
+
+				<div class="form-label-group">
+			      <input v-validate="'required|confirmed:password'" id="pwd_conf" name="password_confirmation" type="password" class="form-control" data-vv-as="password" required>
+					<label for="pwd_conf">Confirmation</label>	      
+			  </div>
+			
+					  <div class="alert alert-danger" v-show="errors.any()">
+					    <div v-if="errors.has('password')">
+					      {{ errors.first('password') }}
+					    </div>
+					    <div v-if="errors.has('password_confirmation')">
+					      {{ errors.first('password_confirmation') }}
+					    </div>	
+					  </div>  
+	          
+	              <button class="btn btn-info" type="submit">VALIDER</button>
+		</form>
+		</div>
+		<div class="col-md-4 pt-2 text-center">
+		       <h4>Modifier Pseudo</h4>
+		
+         <form id="ModifPseudo" class="form-signin" method="post" > 
+	          <div class="form-label-group">
+	            <input type="text" id="old_pseudo" name="Old_Identifiant" class="form-control" required>
+	            <label for="old_pseudo">Ancien Pseudo</label>
+	          </div> 
+	          <div class="form-label-group">
+	            <input type="text" id="pseudo" name="Identifiant" class="form-control" required>
+	            <label for="pseudo">Pseudo</label>
+	          </div> 
+	          
+	          <div class="form-label-group">
+	            <input type="password" id="mdp" name="MotDePasse" class="form-control" required>
+	            <label for="mdp">Mot de passe</label>
+	          </div> 
+	          
+	              <button class="btn btn-info" type="submit">VALIDER</button>
+		</form>
+		</div>
+		</div>
+		</div>
+        
+        <div class="row justify-content-center pb-4 pt-4">
 			
 			<div class="dropdown pr-1" id="show_gen" >
 				  <button v-on:click="show_gen" class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton_classement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -79,6 +151,9 @@
 				    <a class="dropdown-item" href="#">Hebdomadaire</a>
 				  </div>
 			</div>  
+			
+			
+			<!-- affichage des Scores -->
 			
 				
 			<div class="dropdown pl-1" id="show_pers">
