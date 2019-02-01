@@ -21,14 +21,12 @@
 
 <body>
 	
+	<div id="main">
 		<c:import url="/jsp/Menu.jsp"/>
-
-		<div class="row">
-		    	<div class="pb-4 col" style="text-align:center;"><img src="<c:url value="/img/Partie.png"/>" alt="Pacman" ></div>
-		    	</div>
-		    	<div class="row">
-		    	<div class="col">
-		<form id="divUser" class="form-signin" method="post" v-if=v2_account > 
+		
+		<div class="container-fluid text-center mb-4">
+		    	<div class="pb-4" style="text-align:center;"><img src="<c:url value="/img/Partie.png"/>" alt="Pacman" ></div>
+		 <form id="divUser" class="form-signin" method="post" v-if=v2_account > 
 	          <div class="form-label-group">
 	            <input type="text" id="pseudo" name="Identifiant" class="form-control" required>
 	            <label for="identifiant">Pseudo</label>
@@ -41,7 +39,7 @@
 	              <button class="btn btn-info" type="submit">SE CONNECTER</button>
 		</form>
 		
-		<form id="app-user" class="form-signin" @submit.prevent="validateBeforeSubmit()" method="post" v-if=v1_account> 
+		<form id="User" class="form-signin" @submit.prevent="validateBeforeSubmit()" method="post" v-if=v1_account> 
 	          <div class="form-label-group">
 	            <input type="text" id="pseudo" name="Identifiant" class="form-control" required>
 	            <label for="pseudo">Pseudo</label>
@@ -68,12 +66,9 @@
      
 	            <button class="btn btn-info" type="submit">CRÉER COMPTE</button>
         </form>
-        </div>
-</div>
-	   
-	    <div id="app-tab">	  	  
-			<div class="row justify-content-center pb-4">
-			<div class="col">
+        
+        <div class="row justify-content-center pb-4">
+			
 			<div class="dropdown pr-1" id="show_gen" >
 				  <button v-on:click="show_gen" class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton_classement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				   Classement Personnel
@@ -96,11 +91,9 @@
 				    <a class="dropdown-item" href="#">Hebdomadaire</a>
 				  </div>
 			</div>   
-			</div> 
 			</div>
-			
-			
-	        <div class="row justify-content-center pb-2" v-if=v1>
+		
+		 <div class="row justify-content-center pb-2" v-if=v1_tab>
 	        	<div class="col-md-2 table-bordered table_score">
 	        		<h5>Classement</h5>	        	
 	        	</div>
@@ -112,7 +105,7 @@
 	        	</div>	        
 	        </div>
 	        
-	        <div class="row justify-content-center pb-2" v-if=v2>
+	        <div class="row justify-content-center pb-2" v-if=v2_tab>
 	        	<div class="col-md-2 table-bordered table_score">
 	        		<h5>Pseudo</h5>	        	
 	        	</div>
@@ -125,13 +118,12 @@
 	        	<div class="col-md-2 table-bordered table_score">
 	        		<h5>Résultat de la partie</h5>	        	
 	        	</div> 	        
-	        </div>	 
-	        
-	      </div>
+	        </div>
 		
-		
+		</div>      		
+		</div>
       
-      	<script src="<c:url value="/js/vue.js"/>"></script>
+      <script src="<c:url value="/js/vue.js"/>"></script>	
 
 </body>
 

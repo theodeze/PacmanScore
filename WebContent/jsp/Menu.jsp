@@ -30,9 +30,8 @@
       
     	<!-- Bouton pour la Connexion/Première Connexion/Déconnexion -->
     	
-    	<div id="app-co">
 		
-		<div v-if=v1>
+		<div v-if=v1_connexion>
 			     	<div class="btn-group" role="group">
 		
     	<div id="creat">
@@ -45,7 +44,7 @@
 		</div>        	       
 		</div>
 	            
-	        <div v-if=v2> 
+	        <div v-if=v2_connexion> 
 	     	<div class="btn-group" role="group">
 	              <div class="pr-2"><button class="btn btn-info" type="submit">Modifier Compte</button></div>         
 	              <div class="pl-2"><button class="btn btn-danger" type="submit">SE DECONNECTER</button></div>
@@ -53,5 +52,4 @@
 	     </div>  
 	     </div> 
     </div>     
-  </div>
 </nav>
