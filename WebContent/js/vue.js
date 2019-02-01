@@ -1,61 +1,61 @@
 
-Vue.use(VeeValidate,{locale: 'fr'});
+Vue.use(VeeValidate, { locale: 'fr' });
 
 var main = new Vue({
 	el: '#main',
-	data:{
+	data: {
 		v1_account: false,
 		v2_account: false,
 		v1_tab: true,
 		v2_tab: false,
 		v1_connexion: true,
 		v2_connexion: false,
-		v_modif:false
-	},	
-	methods:{
-		show_gen:function(){
+		v_modif: false
+	},
+	methods: {
+		show_gen: function () {
 			this.v1_tab = true;
 			this.v2_tab = false;
 		},
-		show_perso:function(){
+		show_perso: function () {
 			this.v1_tab = false;
 			this.v2_tab = true;
 		},
-		connexion:function(){
+		connexion: function () {
 			this.v1_connexion = true;
 			this.v2_connexion = false;
 		},
-		deconnexion:function(){
+		deconnexion: function () {
 			this.v1_connexion = false;
 			this.v2_connexion = true;
 		},
-		 validateBeforeSubmit() {
-				this.$validator.localize('fr');
-		      this.$validator
-		        .validateAll()
-		        .then(function(response) {
-		          // Validation success if response === true
-		        })
-		        .catch(function(e) {
-		          // Catch errors
-		        })
-		    },
-		creat:function(){
+		validateBeforeSubmit() {
+			this.$validator.localize('fr');
+			this.$validator
+				.validateAll()
+				.then(function (response) {
+					// Validation success if response === true
+				})
+				.catch(function (e) {
+					// Catch errors
+				})
+		},
+		creat: function () {
 			this.v1_account = true;
 			this.v2_account = false;
 		},
-		conn:function(){
+		conn: function () {
 			this.v1_account = false;
 			this.v2_account = true;
 		},
-		modification:function(){
-			if(this.v_modif){
-				this.v_modif=false;
+		modification: function () {
+			if (this.v_modif) {
+				this.v_modif = false;
 			}
-			else{
-				this.v_modif=true;
+			else {
+				this.v_modif = true;
 			}
 		}
-	}	
+	}
 });
 
