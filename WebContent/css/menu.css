@@ -1,0 +1,57 @@
+ body {
+        padding-bottom: 10px;
+        background: repeating-linear-gradient(-45deg, white, white 4px, #e9e8e7 4px, white 6px);
+      }
+      h2{
+      background:#3d596a;
+      color:white;
+      }
+      #components{
+        min-height: 600px;
+        margin-top: 5px;
+        
+      }
+            
+      .repeating-linear {
+  		background: repeating-linear-gradient(-45deg, #0097ae, #0097ae 4px, #00889b 4px, #0097ae 6px);
+  		width:100%;
+  		height:130px;
+	  }
+      #target{
+        min-height: 200px;
+        border: 1px solid #ccc;
+        padding: 5px;
+      }
+      #target .component{
+        border: 1px solid #fff;
+
+      }
+      #temp{
+        width: 500px;
+        background: white;
+        border: 1px dotted #ccc;
+        border-radius: 10px;
+      }      
+    
+      .popover-content form {
+        width: 250px;
+      }
+      .popover-content form .btn{
+        margin-right: 10px;
+        margin-bottom:2px;
+      }
+      
+      #source{
+        min-height: 500px;
+        
+      }      
+	
+	 .shadowbottom {
+    	box-shadow: -0px 15px 15px -15px black;    
+  }
+  
+  
+  nav{
+  	background: repeating-linear-gradient(-45deg, #0097ae, #0097ae 4px, #00889b 4px, #0097ae 6px);
+  }
+  
