@@ -5,9 +5,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import fr.univangers.pacman.score.dao.DAOFactory;
 
 @WebListener
