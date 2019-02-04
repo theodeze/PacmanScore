@@ -18,10 +18,13 @@ import fr.univangers.pacman.score.dao.DAOUtilisateur;
 @WebServlet("/User")
 public class User extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+    public static final String CONF_DAO_FACTORY = "daofactory";
 	private static final String VUE = "/WEB-INF/jsp/User.jsp";
 	public static final String ATT_SESSION_USER = "sessionUtilisateur";
     public static final String ATT_MSG_WARNING = "Warning";
     public static final String ATT_MSG_SUCCESS = "Success";
+    
+    private DAOUtilisateur daoUser;
 	//private static final String URL_REDIRECTION  = "/User";
 
        
@@ -33,6 +36,9 @@ public class User extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    public void init() throws ServletException{
+    	 this.daoUser = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDaoUtilisateur();
+    }
     
     public boolean validateMDP(Utilisateur aTester, Utilisateur dansLaBD) {
     	if (dansLaBD!=null) {  	
@@ -66,13 +72,10 @@ public class User extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String type = request.getParameter("Type");
     	HttpSession session = request.getSession();
     	Utilisateur utilisateur = new Utilisateur();	
-    	DAOUtilisateur daoUser = DAOFactory.getInstance().getDaoUtilisateur();
     	
-    	boolean result_connexion = false;
-    	boolean result_inscription = false;  	
+    	boolean result = false;
     	String email_connexion=request.getParameter("Identifiant_connexion");
 		String email_inscription=request.getParameter("Identifiant_inscription");
 
@@ -80,16 +83,14 @@ public class User extends HttpServlet {
 	    	utilisateur.setEmail(email_connexion);
 			utilisateur.setMotDePasse(request.getParameter("MotDePasse_connexion"));
 					
-			result_connexion = validateMDP(utilisateur,daoUser.trouver(email_connexion));
-			if(!result_connexion) {
+			result = validateMDP(utilisateur,daoUser.trouver(email_connexion));
+			if(!result) {
 				request.setAttribute( ATT_MSG_WARNING, "Email et/ou mot de passe incorrect(s)");
-			}
-			if (type != null && result_connexion) {
-				request.setAttribute( ATT_MSG_SUCCESS, "Vous êtes connecté");
-				session.setAttribute( ATT_SESSION_USER, utilisateur);
+				session.setAttribute( ATT_SESSION_USER, null);
 			}
 			else {
-				session.setAttribute( ATT_SESSION_USER, null);
+				request.setAttribute( ATT_MSG_SUCCESS, "Vous êtes connecté");
+				session.setAttribute( ATT_SESSION_USER, utilisateur);
 			}
     	}
 		
@@ -99,19 +100,24 @@ public class User extends HttpServlet {
 			utilisateur.setPseudo(pseudo);
 			utilisateur.setMotDePasse(request.getParameter("MotDePasse_inscription"));
 			
-			result_inscription = validateNotExistInDB(daoUser.trouver(email_connexion));
-			if(!result_inscription) {
+			result = validateNotExistInDB(daoUser.trouver(email_connexion));
+			if(!result) {
 				request.setAttribute( ATT_MSG_WARNING, "Email déjà utilisé");
+				session.setAttribute( ATT_SESSION_USER, null);
 			}
-			if (type != null && result_inscription) {
+			else {				
 				daoUser.creer(utilisateur);
 				request.setAttribute( ATT_MSG_SUCCESS, "Inscrit avec succès");
 				session.setAttribute( ATT_SESSION_USER, utilisateur);
-			}
-			else {
-				session.setAttribute( ATT_SESSION_USER, null);
 			}		
 		}
+		/*System.out.println("test 2");
+    	Utilisateur U = new Utilisateur();
+    	U.setEmail("bidon@m.c");
+    	U.setPseudo("Test");
+    	U.setMotDePasse("t");
+    	daoUser.creer(U);
+		System.out.println("test 3");*/  	
 		
 		doGet(request, response);
 	}	

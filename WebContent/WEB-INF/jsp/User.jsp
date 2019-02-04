@@ -16,13 +16,12 @@
 	 <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js">
 	</script>
 	<script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/locale/fr.js"></script>
+	
 </head>
 
 <body>
-
 	<div id="main">
 		<c:import url="/jsp/Menu.jsp" />
-
 
 		<div class="container-fluid justify-content-center mb-4">
 
@@ -35,9 +34,9 @@
 			<div class="pt-4 pb-2 text-center"><img src="<c:url value="/img/Partie.png"/>" alt="Pacman"></div>
 
  		<c:if test="${not empty Success}">	    	  	
-	      <div class="alert alert-success alert-dismissible" role="alert">
+	      <div class="alert alert-success alert-dismissible" role="alert" v-if=v1_connexion>
           <strong>Succès</strong> <c:out value = "${Success}"/> <c:remove var="Success" scope="session" />
-	        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	        <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:load=connexion>
 	          <span aria-hidden="true">&times;</span>
 	        </button>
 	      </div>
@@ -67,7 +66,7 @@
 				<button class="btn btn-info" type="submit">SE CONNECTER</button>
 			</form>
 
-			<form id="User" class="form-signin border border-info" method="post" v-if=v1_account>
+			<form id="User" class="form-signin border border-info" v-on:submit.prevent="validateBeforeSubmit()" method="post" v-if=v1_account>
 				<div class="form-label-group">
 					<input type="text" id="email_inscription" name="Identifiant_inscription" class="form-control" required>
 					<label for="email_inscription">Email</label>
@@ -116,7 +115,7 @@
 
 				<div class="col-md-4 pt-2 text-center">
 					<h4>Modifier Mot de passe</h4>
-					<form id="ModifMDP" class="form-signin" @submit.prevent="validateBeforeSubmit()" method="post">
+					<form id="ModifMDP" class="form-signin" v-on:submit.prevent="validateBeforeSubmit()" method="post">
 						<div class="form-label-group">
 							<input type="text" id="email_modif_mdp" name="Identifiant_modif_mdp" class="form-control" required>
 							<label for="email_modif_mdp">Email</label>

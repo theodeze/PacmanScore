@@ -38,6 +38,8 @@ var main = new Vue({
 				.validateAll()
 				.then(function (response) {
 					// Validation success if response === true
+					this.form.submit();
+
 				})
 				.catch(function (e) {
 					// Catch errors
@@ -56,8 +58,7 @@ var main = new Vue({
 		},
 		fermer_modification: function() {
 			this.v_modif = false;
-		}
-		
+		}		
 	}
 });
 
