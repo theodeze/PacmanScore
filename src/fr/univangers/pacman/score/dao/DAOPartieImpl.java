@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.univangers.pacman.score.beans.Partie;
 
@@ -32,6 +35,13 @@ public class DAOPartieImpl implements DAOPartie {
     		+ COLUMN_DATE		+ " FROM "
     		+ TABLE_NAME		+ " WHERE "
     		+ COLUMN_PSEUDO		+ " = ?";
+    private static final String SQL_SELECT_PAR_DATE = "SELECT "
+    		+ COLUMN_PSEUDO		+ ", "
+    		+ COLUMN_SCORE		+ ", "
+    		+ COLUMN_VICTORY	+ ", "
+    		+ COLUMN_DATE		+ " FROM "
+    		+ TABLE_NAME		+ " WHERE "
+    		+ COLUMN_DATE		+ " = ?";
     
     public DAOPartieImpl(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -99,6 +109,29 @@ public class DAOPartieImpl implements DAOPartie {
 	    }
 	    
 	    return partie;
+	}
+	
+	@Override
+	public List<Partie> trouverParDate(Timestamp date) throws DAOException {
+	    Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    List<Partie> parties = new ArrayList<>();
+
+	    try {
+	        connexion = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT_PAR_DATE, false, date);
+	        resultSet = preparedStatement.executeQuery();
+	        while(resultSet.next()) {
+	        	parties.add(map(resultSet));
+	        }
+	    } catch(SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+	    }
+	    
+	    return parties;
 	}
 
 	private static Partie map(ResultSet resultSet) throws SQLException {
