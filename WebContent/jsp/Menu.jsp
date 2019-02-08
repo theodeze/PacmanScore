@@ -32,20 +32,20 @@
                 <div class="btn-group" role="group">
 
                     <div id="create">
-                        <div class="pr-2"><button v-on:click="create" class="btn btn-info" type="submit">Créer Compte</button></div>
+                        <div class="pr-2"><button v-on:click="create" class="btn btn-info" type="button">Créer Compte</button></div>
                     </div>
                     <div id="notConnected">
-                        <div class="pl-2"><button v-on:click="notConnected" class="btn btn-success" type="submit">SE
+                        <div class="pl-2"><button v-on:click="notConnected" class="btn btn-success" type="button">SE
                                 CONNECTER</button></div>
                     </div>
                 </div>
             </c:if>
 
-            <c:if test="${sessionScope.sessionUtilisateur}">
+            <c:if test="${!empty sessionScope.sessionUtilisateur}">
                 <div class="btn-group" role="group">
-                    <div class="pr-2"><button v-on:click="modification" class="btn btn-info" type="submit">Modifier
+                    <div class="pr-2"><button v-on:click="modification" class="btn btn-info" type="button">Modifier
                             Compte</button></div>
-                    <div class="pl-2"><button class="btn btn-danger" type="button">SE DECONNECTER</button></div>
+                    <div class="pl-2"><form id="deconnexion" method="post"><button name="Deconnexion_activate" class="btn btn-danger" type="text">SE DECONNECTER</button></form></div>
                 </div>
             </c:if>
         </div>

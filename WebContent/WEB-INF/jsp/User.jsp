@@ -11,8 +11,10 @@
     <link rel="icon" href="<c:url value="/img/ghost_blue.png"/>"> <title>Accueil - PacmanScore</title>
 
     <link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>"> <link rel="stylesheet" href="<c:url value="/css/Accueil.css"/>">
-        <script src="<c:url value="/js/jquery.min.js"/>"> </script> <script src="<c:url value="/js/popper.min.js"/>"> </script>
-        <script src="<c:url value="/js/bootstrap.min.js"/>"> </script> <script src="<c:url value="/js/vue.min.js"/>"> </script>
+       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> 
+<script src="<c:url value="/js/vue.min.js"/>"> </script>
         <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js">
         </script>
     <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/locale/fr.js"></script>
@@ -144,7 +146,7 @@
             </c:if>
 
 
-            <c:if test="${sessionScope.sessionUtilisateur}">
+            <c:if test="${!empty sessionScope.sessionUtilisateur}">
                 <!-- Modification du profil -->
                 <div class="border border-info mt-2" v-if=v_modif>
 
@@ -225,7 +227,7 @@
 
                             <form id="ModifPseudo" class="form-signin" method="post">
                                 <div class="form-label-group">
-                                    <input type="text" id="old_email_modif_pseudo" name="Identifiant_modif_pseudo"
+                                    <input type="text" id="pseudo_modif_pseudo" name="Pseudo_modif_pseudo"
                                         class="form-control" required>
                                     <label for="pseudo_modif_email">Nouveau Pseudo</label>
                                 </div>
@@ -265,7 +267,6 @@
                         </div>
                     </div>
 
-
                     <!-- affichage des Scores -->
 
 
@@ -281,8 +282,15 @@
                         </div>
                     </div>
                 </div>
-
-            </c:if>
+                
+                
+                <form id="search" class="form-signin" name="search_inDB" method="post">  
+					<div class="row justify-content-center">            	           
+			            	<div class="col-md-9"><input type="text" id="requete" name="requete_forDB" class="form-control" placeholder="Entrez votre requête..." required/></div>
+			            	<div class="col-md-3"><button class="btn btn-outline-primary" type="submit">Search</button></div>
+	           		</div>
+	            </form>
+            </c:if>        
 
             <div class="row justify-content-center pb-2 pt-4" v-if=v1_tab>
                 <div class="col-md-3 table-bordered border-info table_score ">
@@ -325,7 +333,7 @@
                     </div>
 
                     <!-- Modal body -->
-                    <form id="suppr_compte" class="form-signin" method="post">
+                    <form id="suppr_compte" class="form-signin" name="suppr_compte_form" method="post">
                         <div class="modal-body">
                             <label for=typePage>Êtes-vous vraiment sûr de vouloir supprimer votre compte ? </label>
 
@@ -344,7 +352,7 @@
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button class="btn btn-outline-info" data-dismiss="modal" type="submit">Valider</button>
+                            <button class="btn btn-outline-info" data-dismiss="modal" type="submit" onclick="this.form.submit()">Valider</button>
                             <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Annuler</button>
                         </div>
                     </form>
@@ -354,4 +362,5 @@
     </div>
 
 
-    <script type="module" src="<c:url value="/js/vue.js"/>"> </script> </body> </html>
+    <script type="module" src="<c:url value="/js/vue.js"/>"> </script>
+    <script type="module" src="<c:url value="/js/score_data.js"/>"> </script> </body> </html>
