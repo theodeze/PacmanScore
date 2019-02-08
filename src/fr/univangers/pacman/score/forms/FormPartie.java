@@ -26,6 +26,12 @@ public class FormPartie {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(resultat);
 	}
+    
+	public String get(HttpServletRequest request, long id) {
+		Partie resultat = daoPartie.trouver(id);
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		return gson.toJson(resultat);
+	}
 	
 	public String post(HttpServletRequest request) {
 		Partie partie = new Partie();
@@ -35,6 +41,10 @@ public class FormPartie {
 		daoPartie.creer(partie);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(partie);
+	}
+	
+	public void delete(HttpServletRequest request, long id) {
+		daoPartie.supprimer(id);;
 	}
 	
 }

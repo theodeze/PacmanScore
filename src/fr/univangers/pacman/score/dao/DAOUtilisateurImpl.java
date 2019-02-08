@@ -36,6 +36,10 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
     private static final String SQL_DELETE_PAR_EMAIL = "DELETE FROM "
     		+ TABLE_NAME		+ " WHERE "
     		+ COLUMN_EMAIL		+ " = ?";
+	private static final String SQL_UPDATE_PSEUDO = "UPDATE "
+			+ TABLE_NAME		+ " "
+			+ COLUMN_PSEUDO		+ " = ? WHERE"
+			+ COLUMN_EMAIL		+ " = ?";
 
     public DAOUtilisateurImpl(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;

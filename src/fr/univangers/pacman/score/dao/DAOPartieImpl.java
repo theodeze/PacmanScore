@@ -36,6 +36,14 @@ public class DAOPartieImpl implements DAOPartie {
     		+ COLUMN_DATE		+ " FROM "
     		+ TABLE_NAME		+ " WHERE "
     		+ COLUMN_PSEUDO		+ " = ?";
+    private static final String SQL_SELECT_PAR_ID = "SELECT "
+    		+ COLUMN_ID			+ ", "
+    		+ COLUMN_PSEUDO		+ ", "
+    		+ COLUMN_SCORE		+ ", "
+    		+ COLUMN_VICTORY	+ ", "
+    		+ COLUMN_DATE		+ " FROM "
+    		+ TABLE_NAME		+ " WHERE "
+    		+ COLUMN_ID			+ " = ?";
     private static final String SQL_SELECT_PAR_DATE = "SELECT "
     		+ COLUMN_ID			+ ", "
     		+ COLUMN_PSEUDO		+ ", "
@@ -51,6 +59,9 @@ public class DAOPartieImpl implements DAOPartie {
     		+ COLUMN_VICTORY	+ ", "
     		+ COLUMN_DATE		+ " FROM "
     		+ TABLE_NAME;
+    private static final String SQL_DELETE_PAR_ID = "DELETE FROM "
+    		+ TABLE_NAME		+ " WHERE "
+    		+ COLUMN_ID			+ " = ?";
     
     public DAOPartieImpl(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -98,7 +109,7 @@ public class DAOPartieImpl implements DAOPartie {
 	}
 	
 	@Override
-	public Partie trouver(String pseudo) throws DAOException {
+	public Partie trouverParPseudo(String pseudo) throws DAOException {
 	    Connection connexion = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
@@ -141,6 +152,47 @@ public class DAOPartieImpl implements DAOPartie {
 	    }
 	    
 	    return parties;
+	}
+
+	@Override
+	public Partie trouver(long id) throws DAOException {
+	    Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    Partie partie = null;
+
+	    try {
+	        connexion = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT_PAR_ID, false, id);
+	        resultSet = preparedStatement.executeQuery();
+	        if(resultSet.next()) {
+	        	partie = map(resultSet);
+	        }
+	    } catch(SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+	    }
+	    
+	    return partie;
+	}
+
+	@Override
+	public void supprimer(long id) throws DAOException {
+	    Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+
+	    try {
+	        connexion = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connexion, SQL_DELETE_PAR_ID, false, id);
+	        preparedStatement.executeUpdate();
+	    } catch(SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+	    }
+		
 	}
 	
 	@Override

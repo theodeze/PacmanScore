@@ -15,7 +15,10 @@ public interface DAOPartie {
 	public final static String COLUMN_VICTORY = "victoire";
 
     void creer(Partie partie) throws DAOException;
-    Partie trouver(String pseudo) throws DAOException;
+    Partie trouver(long id) throws DAOException;
+    Partie trouverParPseudo(String pseudo) throws DAOException;
+    void supprimer(long id) throws DAOException;
+    
     List<Partie> trouverParDate(Timestamp date) throws DAOException;
     List<Partie> tous() throws DAOException;
     
