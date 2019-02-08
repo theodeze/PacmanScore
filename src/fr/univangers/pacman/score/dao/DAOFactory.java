@@ -3,9 +3,11 @@ package fr.univangers.pacman.score.dao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 public class DAOFactory {
 
@@ -15,14 +17,10 @@ public class DAOFactory {
     private static final String PROPERTY_NOM_UTILISATEUR = "nomutilisateur";
     private static final String PROPERTY_MOT_DE_PASSE    = "motdepasse";
 	
-	private String url;
-	private String username;
-	private String password;
+	private DataSource datasource;
 	
-	private DAOFactory(String url, String username, String password) {
-		this.url = url;
-		this.username = username;
-		this.password = password;
+	private DAOFactory(DataSource datasource) {
+		this.datasource = datasource;
 	}
 	
 	public static DAOFactory getInstance() throws DAOConfigurationException {
@@ -55,13 +53,21 @@ public class DAOFactory {
             throw new DAOConfigurationException("Le driver est introuvable dans le classpath.", e);
         }
         
-        DAOFactory instance = new DAOFactory(url, nomUtilisateur, motDePasse);
+        PoolProperties p = new PoolProperties();
+        p.setUrl(url);
+        p.setDriverClassName(driver);
+        p.setUsername(nomUtilisateur);
+        p.setPassword(motDePasse);
+        DataSource datasource = new DataSource();
+        datasource.setPoolProperties(p);
+        
+        DAOFactory instance = new DAOFactory(datasource);
 
         return instance;
 	}
 	
     Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, username, password);
+        return datasource.getConnection();
     }
 	
     public DAOUtilisateur getDaoUtilisateur() {

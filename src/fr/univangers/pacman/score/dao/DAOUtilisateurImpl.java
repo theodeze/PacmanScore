@@ -24,17 +24,22 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
     		+ COLUMN_PASSWORD 	+ ", "
     		+ COLUMN_PSEUDO		+ ", "
     		+ COLUMN_DATE_INS	+ ") VALUES(?, ?, ?, CURRENT_TIMESTAMP)";
-    private static final String SQL_SELECT_PAR_EMAIL = "SELECT "
+    private static final String SQL_SELECT_PAR_IDENTIFIANT = "SELECT "
     		+ COLUMN_ID 		+ ", "
     		+ COLUMN_EMAIL 		+ ", "
     		+ COLUMN_PASSWORD 	+ ", "
     		+ COLUMN_PSEUDO		+ ", "
     		+ COLUMN_DATE_INS	+ " FROM "
     		+ TABLE_NAME		+ " WHERE "
-    		+ COLUMN_EMAIL		+ " = ?";
+    		+ COLUMN_PSEUDO		+ " = ? OR"
+    	    + COLUMN_EMAIL		+ " = ?";
     private static final String SQL_DELETE_PAR_EMAIL = "DELETE FROM "
     		+ TABLE_NAME		+ " WHERE "
     		+ COLUMN_EMAIL		+ " = ?";
+	private static final String SQL_UPDATE_PSEUDO = "UPDATE "
+			+ TABLE_NAME		+ " "
+			+ COLUMN_PSEUDO		+ " = ? WHERE"
+			+ COLUMN_EMAIL		+ " = ?";
 
     public DAOUtilisateurImpl(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -82,7 +87,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	}
 
 	@Override
-	public Utilisateur trouver(String email) throws DAOException {
+	public Utilisateur trouver(String identifiant) throws DAOException {
 	    Connection connexion = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
@@ -90,7 +95,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 
 	    try {
 	        connexion = daoFactory.getConnection();
-	        preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT_PAR_EMAIL, false, email);
+	        preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT_PAR_IDENTIFIANT, false, identifiant);
 	        resultSet = preparedStatement.executeQuery();
 	        if(resultSet.next()) {
 	            utilisateur = map(resultSet);

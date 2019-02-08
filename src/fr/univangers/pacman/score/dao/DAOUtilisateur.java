@@ -15,4 +15,10 @@ public interface DAOUtilisateur {
     Utilisateur trouver(String email) throws DAOException;
     void supprimer(String email) throws DAOException;
 	
+    /*
+     * modifier le mot de passe
+     * modifier email
+     * modifier pseudo
+     */
+    
 }
