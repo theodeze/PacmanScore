@@ -10,7 +10,7 @@ import fr.univangers.pacman.score.dao.DAOFactory;
 @WebListener
 public class InitialisationDaoFactory implements ServletContextListener {
 
-    private static final String ATT_DAO_FACTORY = "daofactory";
+    public static final String ATT_DAO_FACTORY = "daofactory";
 
     private DAOFactory daoFactory;
 	

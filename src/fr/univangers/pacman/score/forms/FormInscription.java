@@ -1,5 +1,8 @@
 package fr.univangers.pacman.score.forms;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
@@ -13,10 +16,18 @@ public class FormInscription {
     private static final String CHAMP_CONF       = "confirmation";
     private static final String CHAMP_PSEUDO     = "pseudo";
 
-    private static final String ALGO_CHIFFREMENT = "SHA-256";
+    private String              resultat;
+    private Map<String, String> erreurs          = new HashMap<String, String>();    
+    private DAOUtilisateur 		daoUtilisateur;
     
-    private DAOUtilisateur daoUtilisateur;
-
+    public String getResultat() {
+    	return resultat;
+    }
+    
+    public Map<String, String> getErreurs() {
+    	return erreurs;
+    }
+    
     public FormInscription(DAOUtilisateur daoUtilisateur) {
         this.daoUtilisateur = daoUtilisateur;
     }
@@ -26,37 +37,48 @@ public class FormInscription {
 		String pass = (String) request.getAttribute(CHAMP_PASS);
 		String conf = (String) request.getAttribute(CHAMP_CONF);
 		String pseudo = (String) request.getAttribute(CHAMP_PSEUDO);
-
 		Utilisateur utilisateur = new Utilisateur();
 		try {
 			traiterEmail(email, utilisateur);
 			traiterPass(pass, conf, utilisateur);
 			traiterPseudo(pseudo, utilisateur);
-			
-			daoUtilisateur.creer(utilisateur);
+			if(erreurs.isEmpty()) {
+				daoUtilisateur.creer(utilisateur);
+				resultat = "Inscription réussite";
+			} else {
+				resultat = "Echec inscription";
+			}
 		} catch(DAOException e) {
-			
+            resultat = "Échec de l'inscription : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
 		}
-		
 		return utilisateur;
 	}
 	
 	private void traiterEmail(String email, Utilisateur utilisateur) {
-		
+		try {
+			validationEmail(email);
+		} catch(FormException e) {
+			setErreur(CHAMP_EMAIL, e.getMessage());
+		}
 		utilisateur.setEmail(email);
 	}
 	
 	private void validationEmail(String email) throws FormException {
-		
+		if(email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?"
+				+ ":[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09"
+				+ "\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9]("
+				+ "?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:"
+				+ "25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x"
+				+ "0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"))
+			throw new FormException("L'email est invalide");
 	}
 	
 	private void traiterPass(String pass, String conf, Utilisateur utilisateur) {
 		try {
 			validationPass(pass, conf);
 		} catch (FormException e) {
-			e.printStackTrace();
+			setErreur(CHAMP_PASS, e.getMessage());
 		}
-		
 		String cryptPass = BCrypt.withDefaults().hashToString(12, pass.toCharArray());	
 		utilisateur.setMotDePasse(cryptPass);
 	}
@@ -64,11 +86,32 @@ public class FormInscription {
 	private void validationPass(String pass, String conf) throws FormException {
 		if(!pass.equals(conf))
 			throw new FormException("Les deux mots de passe ne corresponde pas");
+		else if(pass.length() < 8)
+			throw new FormException("Les mots de passe doit avoir une taille supperieur à 8");
+		else if(!pass.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])$"))
+			throw new FormException("Les mots de passe doit être composé d'une miniscule, "
+					+ "une majuscule et un chiffre");
+			
 	}
 	
 	private void traiterPseudo(String pseudo, Utilisateur utilisateur) {
-		
+		try {
+			validationPseudo(pseudo);
+		} catch(FormException e) {
+			setErreur(CHAMP_PSEUDO, e.getMessage());
+		}
 		utilisateur.setPseudo(pseudo);
 	}
+	
+	private void validationPseudo(String pseudo) throws FormException {
+		if(pseudo.length() < 8)
+			throw new FormException("Le pseudo doit avoir une taille supperieur à 8");
+		else if(!pseudo.matches(""))
+			throw new FormException("Le pseudo n'est pas valide");
+	}
+	
+    private void setErreur(String champ, String message) {
+        erreurs.put(champ, message);
+    }
 	
 }

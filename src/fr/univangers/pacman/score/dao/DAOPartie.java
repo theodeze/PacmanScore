@@ -17,5 +17,6 @@ public interface DAOPartie {
     void creer(Partie partie) throws DAOException;
     Partie trouver(String pseudo) throws DAOException;
     List<Partie> trouverParDate(Timestamp date) throws DAOException;
+    List<Partie> tous() throws DAOException;
     
 }
