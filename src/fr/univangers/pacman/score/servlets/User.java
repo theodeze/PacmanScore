@@ -18,12 +18,14 @@ import fr.univangers.pacman.score.dao.DAOUtilisateur;
 @WebServlet("/User")
 public class User extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+    public static final String CONF_DAO_FACTORY = "daofactory";
 	private static final String VUE = "/WEB-INF/jsp/User.jsp";
 	public static final String ATT_SESSION_USER = "sessionUtilisateur";
     public static final String ATT_MSG_WARNING = "Warning";
     public static final String ATT_MSG_SUCCESS = "Success";
-	//private static final String URL_REDIRECTION  = "/User";
-
+    private String email;
+    
+    private DAOUtilisateur daoUser;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -33,10 +35,13 @@ public class User extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    public void init() throws ServletException{
+    	 this.daoUser = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDaoUtilisateur();
+    }
     
-    public boolean validateMDP(Utilisateur aTester, Utilisateur dansLaBD) {
+    public boolean validateMDP(String mdp_a_tester, Utilisateur dansLaBD) {
     	if (dansLaBD!=null) {  	
-    		if (aTester.getMotDePasse().equals(dansLaBD.getMotDePasse()))
+    		if (mdp_a_tester.equals(dansLaBD.getMotDePasse()))
     			return true;
     	}
     	return false;
@@ -52,67 +57,131 @@ public class User extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//HttpSession session = request.getSession();
-        // Supprime la session, ce qui déconnecte l'ulisateur (Doit être testé avant exécution)
-       /* session.invalidate();
-        session = request.getSession();
-        session.setAttribute("Success", "Vous êtes déconnecté");
-        response.sendRedirect(request.getContextPath() + URL_REDIRECTION);	*/	
         this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
-
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String type = request.getParameter("Type");
     	HttpSession session = request.getSession();
     	Utilisateur utilisateur = new Utilisateur();	
-    	DAOUtilisateur daoUser = DAOFactory.getInstance().getDaoUtilisateur();
     	
-    	boolean result_connexion = false;
-    	boolean result_inscription = false;  	
+    	boolean result = false;
     	String email_connexion=request.getParameter("Identifiant_connexion");
 		String email_inscription=request.getParameter("Identifiant_inscription");
+		String old_email_modif_email=request.getParameter("Old_Identifiant_modif_email");
+		String email_modif_mdp=request.getParameter("Identifiant_modif_mdp");
+		String email_modif_pseudo=request.getParameter("Identifiant_modif_pseudo");
+		String email_suppr=request.getParameter("Identifiant_suppr");
+				
+		String deconnexion = request.getParameter("Deconnexion_activate");
+		
+		if(email_connexion!=null) {
+			email = email_connexion;
+		}
+		else if (email_inscription != null) {
+			email = email_inscription;
+		}
 
     	if (email_connexion!=null) {
 	    	utilisateur.setEmail(email_connexion);
-			utilisateur.setMotDePasse(request.getParameter("MotDePasse_connexion"));
+	    	String mdp = request.getParameter("MotDePasse_connexion");
+			utilisateur.setMotDePasse(mdp);
 					
-			result_connexion = validateMDP(utilisateur,daoUser.trouver(email_connexion));
-			if(!result_connexion) {
+			result = validateMDP(mdp,daoUser.trouver(email_connexion));
+			if(!result) {
 				request.setAttribute( ATT_MSG_WARNING, "Email et/ou mot de passe incorrect(s)");
-			}
-			if (type != null && result_connexion) {
-				request.setAttribute( ATT_MSG_SUCCESS, "Vous êtes connecté");
-				session.setAttribute( ATT_SESSION_USER, utilisateur);
+				session.setAttribute( ATT_SESSION_USER, null);
 			}
 			else {
-				session.setAttribute( ATT_SESSION_USER, null);
+				request.setAttribute( ATT_MSG_SUCCESS, "Vous êtes connecté");
+				session.setAttribute( ATT_SESSION_USER, utilisateur);
 			}
     	}
 		
 		else if (email_inscription!=null) {
-	    	utilisateur.setEmail(email_inscription);
-			String pseudo = request.getParameter("Pseudo_inscription");
-			utilisateur.setPseudo(pseudo);
-			utilisateur.setMotDePasse(request.getParameter("MotDePasse_inscription"));
-			
-			result_inscription = validateNotExistInDB(daoUser.trouver(email_connexion));
-			if(!result_inscription) {
-				request.setAttribute( ATT_MSG_WARNING, "Email déjà utilisé");
+			String mdp = request.getParameter("MotDePasse_inscription");
+			String confirm = request.getParameter("MotDePasse_inscription_confirmation");
+
+			if (mdp.equals(confirm)) {
+		    	utilisateur.setEmail(email_inscription);
+				String pseudo = request.getParameter("Pseudo_inscription");
+				utilisateur.setPseudo(pseudo);
+				utilisateur.setMotDePasse(mdp);
+				
+				result = validateNotExistInDB(daoUser.trouver(email_connexion));
+				if(!result) {
+					request.setAttribute( ATT_MSG_WARNING, "Email déjà utilisé");
+					session.setAttribute( ATT_SESSION_USER, null);
+				}
+				else {				
+					daoUser.creer(utilisateur);
+					request.setAttribute( ATT_MSG_SUCCESS, "Inscrit avec succès");
+					session.setAttribute( ATT_SESSION_USER, utilisateur);
+				}		
 			}
-			if (type != null && result_inscription) {
-				daoUser.creer(utilisateur);
-				request.setAttribute( ATT_MSG_SUCCESS, "Inscrit avec succès");
-				session.setAttribute( ATT_SESSION_USER, utilisateur);
+		}  
+    	
+		else if (old_email_modif_email!=null) {
+			String new_email_modif = request.getParameter("Identifiant_modif_email");
+			String pwd_email_modif = request.getParameter("MotDePasse_modif_email");
+			result = validateMDP(pwd_email_modif,daoUser.trouver(old_email_modif_email));
+		
+			// Modification dans la DAO
+			//utilisateur.setEmail(new_email_modif);
+			
+		} 
+    	
+		else if (email_modif_mdp!=null) {
+			
+			String old_pwd_modif_mdp = request.getParameter("old_MotDePasse_modif_mdp");
+			String pwd_modif_mdp = request.getParameter("MotDePasse_modif_mdp");
+			String pwd_modif_mdp_confirm = request.getParameter("MotDePasse_modif_mdp_confirm");
+			result = validateMDP(old_pwd_modif_mdp,daoUser.trouver(email_modif_mdp));
+		
+			// Modification dans la DAO
+			//utilisateur.setEmail(new_email_modif);
+			
+		} 
+    	
+		else if (email_modif_pseudo!=null) {
+			
+			String pseudo_modif_pseudo = request.getParameter("Pseudo_modif_pseudo");
+			String pwd_modif_pseudo = request.getParameter("MotDePasse_modif_pseudo");
+			result = validateMDP(pwd_modif_pseudo,daoUser.trouver(email_modif_pseudo));
+		
+			// Modification dans la DAO
+			//utilisateur.setEmail(new_email_modif);
+			
+		} 
+
+		else if (email_suppr!=null) {			
+			String pwd_suppr = request.getParameter("MotDePasse_suppr");
+			result = validateMDP(pwd_suppr,daoUser.trouver(email_suppr));			
+			if(!result) {
+				request.setAttribute( ATT_MSG_WARNING, "Email et/ou mot de passe incorrect(s)");				
 			}
 			else {
-				session.setAttribute( ATT_SESSION_USER, null);
-			}		
-		}
-		
+				System.out.println(email);
+				if(email_suppr.equals(email)) {
+					daoUser.supprimer(email_suppr);				
+					session.invalidate();
+		            session = request.getSession();
+					request.setAttribute( ATT_MSG_SUCCESS, "Compte supprimé avec succès");
+				}
+				else 
+					request.setAttribute( ATT_MSG_WARNING, "Il ne s'agit pas de votre compte");
+			}			
+		} 
+    	
+		else if(deconnexion != null) {
+            // Supprime la session, ce qui déconnecte l'ulisateur (Doit être testé avant exécution)
+            session.invalidate();
+            session = request.getSession();
+            session.setAttribute(ATT_MSG_SUCCESS, "Vous êtes déconnecté");
+    		}	
+    	
 		doGet(request, response);
 	}	
 }
