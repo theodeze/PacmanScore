@@ -58,7 +58,7 @@ public class DAOPartieImpl implements DAOPartie {
     		+ COLUMN_SCORE		+ ", "
     		+ COLUMN_VICTORY	+ ", "
     		+ COLUMN_DATE		+ " FROM "
-    		+ TABLE_NAME;
+    		+ TABLE_NAME + " WHERE " + COLUMN_VICTORY + " IS NOT FALSE LIMIT 10";
     private static final String SQL_DELETE_PAR_ID = "DELETE FROM "
     		+ TABLE_NAME		+ " WHERE "
     		+ COLUMN_ID			+ " = ?";

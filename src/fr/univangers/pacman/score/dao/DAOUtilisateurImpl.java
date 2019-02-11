@@ -31,7 +31,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
     		+ COLUMN_PSEUDO		+ ", "
     		+ COLUMN_DATE_INS	+ " FROM "
     		+ TABLE_NAME		+ " WHERE "
-    		+ COLUMN_PSEUDO		+ " = ? OR"
+    		+ COLUMN_PSEUDO		+ " = ? OR "
     	    + COLUMN_EMAIL		+ " = ?";
     private static final String SQL_DELETE_PAR_EMAIL = "DELETE FROM "
     		+ TABLE_NAME		+ " WHERE "
