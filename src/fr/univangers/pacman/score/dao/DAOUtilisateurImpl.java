@@ -31,15 +31,23 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
     		+ COLUMN_PSEUDO		+ ", "
     		+ COLUMN_DATE_INS	+ " FROM "
     		+ TABLE_NAME		+ " WHERE "
-    		+ COLUMN_PSEUDO		+ " = ? OR"
+    		+ COLUMN_PSEUDO		+ " = ? OR "
     	    + COLUMN_EMAIL		+ " = ?";
     private static final String SQL_DELETE_PAR_EMAIL = "DELETE FROM "
     		+ TABLE_NAME		+ " WHERE "
     		+ COLUMN_EMAIL		+ " = ?";
 	private static final String SQL_UPDATE_PSEUDO = "UPDATE "
 			+ TABLE_NAME		+ " "
-			+ COLUMN_PSEUDO		+ " = ? WHERE"
+		    + COLUMN_ID			+ " = ? WHERE "
+			+ COLUMN_PSEUDO		+ " = ?";
+	private static final String SQL_UPDATE_EMAIL = "UPDATE "
+			+ TABLE_NAME		+ " "
+			+ COLUMN_ID			+ " = ? WHERE "
 			+ COLUMN_EMAIL		+ " = ?";
+	private static final String SQL_UPDATE_PASSWORD = "UPDATE "
+			+ TABLE_NAME		+ " "
+			+ COLUMN_ID			+ " = ? WHERE "
+			+ COLUMN_PASSWORD	+ " = ?";
 
     public DAOUtilisateurImpl(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -51,7 +59,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_CREATE, false);
 	        int statut = preparedStatement.executeUpdate();
 	        if(statut != 0) {
-	            throw new DAOException("Échec de la création de la table partie.");
+	            throw new DAOException("Echec de la création de la table partie.");
 	        }
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
@@ -71,13 +79,13 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, utilisateur.getEmail(), utilisateur.getMotDePasse(), utilisateur.getPseudo());
 	        int statut = preparedStatement.executeUpdate();
 	        if(statut == 0) {
-	            throw new DAOException("Échec de la création de l'utilisateur, aucune ligne ajoutée dans la table.");
+	            throw new DAOException("Echec de la création de l'utilisateur, aucune ligne ajoutée dans la table.");
 	        }
 	        valeursAutoGenerees = preparedStatement.getGeneratedKeys();
 	        if(valeursAutoGenerees.next()) {
 	            utilisateur.setId(valeursAutoGenerees.getLong(1));
 	        } else {
-	            throw new DAOException("Échec de la création de l'utilisateur en base, aucun ID auto-généré retourné.");
+	            throw new DAOException("Echec de la création de l'utilisateur en base, aucun ID auto-généré retourné.");
 	        }
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
@@ -107,6 +115,60 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	    }
 	    
 	    return utilisateur;
+	}
+
+	@Override
+	public void modifierEmail(Utilisateur utilisateur, String email) throws DAOException {
+	    Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+
+	    try {
+	        connexion = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE_EMAIL, false, 
+	        		utilisateur.getId(), email);
+	        preparedStatement.executeUpdate();
+	        utilisateur.setEmail(email);
+	    } catch(SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        fermeturesSilencieuses(preparedStatement, connexion);
+	    }
+	}
+
+	@Override
+	public void modifierPseudo(Utilisateur utilisateur, String pseudo) throws DAOException {
+	    Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+
+	    try {
+	        connexion = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE_PSEUDO, false, 
+	        		utilisateur.getId(), pseudo);
+	        preparedStatement.executeUpdate();
+	        utilisateur.setPseudo(pseudo);
+	    } catch(SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        fermeturesSilencieuses(preparedStatement, connexion);
+	    }
+	}
+
+	@Override
+	public void modifierPass(Utilisateur utilisateur, String motDePasse) throws DAOException {
+	    Connection connexion = null;
+	    PreparedStatement preparedStatement = null;
+
+	    try {
+	        connexion = daoFactory.getConnection();
+	        preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE_PASSWORD, false, 
+	        		utilisateur.getId(), motDePasse);
+	        preparedStatement.executeUpdate();
+	        utilisateur.setMotDePasse(motDePasse);
+	    } catch(SQLException e) {
+	        throw new DAOException(e);
+	    } finally {
+	        fermeturesSilencieuses(preparedStatement, connexion);
+	    }
 	}
 
 	@Override

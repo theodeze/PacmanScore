@@ -22,12 +22,17 @@ public class FormPartie {
     }
     
 	public String get(HttpServletRequest request) {
-		List<Partie> resultat = daoPartie.tous();
+		String pseudo = (String) request.getParameter(CHAMP_PSEUDO);
+		List<Partie> resultat = null;
+		if(pseudo != null)
+			resultat = daoPartie.trouverParPseudo(pseudo);
+		else
+			resultat = daoPartie.tous();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(resultat);
 	}
     
-	public String get(HttpServletRequest request, long id) {
+	public String get(long id) {
 		Partie resultat = daoPartie.trouver(id);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(resultat);
@@ -43,7 +48,11 @@ public class FormPartie {
 		return gson.toJson(partie);
 	}
 	
+<<<<<<< HEAD
 	public void delete(HttpServletRequest request, long id) {
+=======
+	public void delete(long id) {
+>>>>>>> origin/TDE_dev
 		daoPartie.supprimer(id);
 	}
 	

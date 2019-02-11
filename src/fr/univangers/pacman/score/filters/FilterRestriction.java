@@ -15,14 +15,13 @@ import javax.servlet.http.HttpSession;
 @WebFilter("/FilterRestriction")
 public class FilterRestriction implements Filter {
 
-	private final static String ATT_SESSION_USER = "";
-	private final static String ACCES_PUBLIC	 = "";
+	private static final String ATT_SESSION_USER = "";
+	private static final String ACCES_PUBLIC	 = "";
 	
-    public FilterRestriction() {
-    }
+    public FilterRestriction() { /* */ }
 
-	public void destroy() {
-	}
+    @Override
+	public void destroy() { /* */ }
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
@@ -36,7 +35,7 @@ public class FilterRestriction implements Filter {
         }
     }
 
-	public void init(FilterConfig fConfig) throws ServletException {
-	}
+    @Override
+	public void init(FilterConfig fConfig) throws ServletException { /* */ }
 
 }

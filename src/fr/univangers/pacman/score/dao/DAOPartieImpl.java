@@ -58,7 +58,7 @@ public class DAOPartieImpl implements DAOPartie {
     		+ COLUMN_SCORE		+ ", "
     		+ COLUMN_VICTORY	+ ", "
     		+ COLUMN_DATE		+ " FROM "
-    		+ TABLE_NAME;
+    		+ TABLE_NAME + " WHERE " + COLUMN_VICTORY + " IS NOT FALSE LIMIT 10";
     private static final String SQL_DELETE_PAR_ID = "DELETE FROM "
     		+ TABLE_NAME		+ " WHERE "
     		+ COLUMN_ID			+ " = ?";
@@ -73,7 +73,7 @@ public class DAOPartieImpl implements DAOPartie {
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_CREATE, false);
 	        int statut = preparedStatement.executeUpdate();
 	        if(statut != 0) {
-	            throw new DAOException("Échec de la création de la table partie.");
+	            throw new DAOException("Ã‰chec de la crÃ©ation de la table partie.");
 	        }
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
@@ -93,13 +93,13 @@ public class DAOPartieImpl implements DAOPartie {
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, partie.getPseudo(), partie.getScore(), partie.isVictoire());
 	        int statut = preparedStatement.executeUpdate();
 	        if(statut == 0) {
-	            throw new DAOException("Échec de la création de la partie, aucune ligne ajoutée dans la table.");
+	            throw new DAOException("Ã‰chec de la crÃ©ation de la partie, aucune ligne ajoutÃ©e dans la table.");
 	        }
 	        valeursAutoGenerees = preparedStatement.getGeneratedKeys();
 	        if(valeursAutoGenerees.next()) {
 	            partie.setId(valeursAutoGenerees.getLong(1));
 	        } else {
-	            throw new DAOException("Échec de la création de la partie en base, aucun ID auto-généré retourné.");
+	            throw new DAOException("Ã‰chec de la crÃ©ation de la partie en base, aucun ID auto-gÃ©nÃ©rÃ© retournÃ©.");
 	        }
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
@@ -109,18 +109,18 @@ public class DAOPartieImpl implements DAOPartie {
 	}
 	
 	@Override
-	public Partie trouverParPseudo(String pseudo) throws DAOException {
+	public List<Partie> trouverParPseudo(String pseudo) throws DAOException {
 	    Connection connexion = null;
 	    PreparedStatement preparedStatement = null;
 	    ResultSet resultSet = null;
-	    Partie partie = null;
+	    List<Partie> parties = new ArrayList<>();
 
 	    try {
 	        connexion = daoFactory.getConnection();
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT_PAR_PSEUDO, false, pseudo);
 	        resultSet = preparedStatement.executeQuery();
-	        if(resultSet.next()) {
-	        	partie = map(resultSet);
+	        while(resultSet.next()) {
+	        	parties.add(map(resultSet));
 	        }
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
@@ -128,7 +128,7 @@ public class DAOPartieImpl implements DAOPartie {
 	        fermeturesSilencieuses(resultSet, preparedStatement, connexion);
 	    }
 	    
-	    return partie;
+	    return parties;
 	}
 	
 	@Override
@@ -181,7 +181,6 @@ public class DAOPartieImpl implements DAOPartie {
 	public void supprimer(long id) throws DAOException {
 	    Connection connexion = null;
 	    PreparedStatement preparedStatement = null;
-	    ResultSet resultSet = null;
 
 	    try {
 	        connexion = daoFactory.getConnection();
@@ -190,7 +189,7 @@ public class DAOPartieImpl implements DAOPartie {
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
 	    } finally {
-	        fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+	        fermeturesSilencieuses(preparedStatement, connexion);
 	    }
 		
 	}

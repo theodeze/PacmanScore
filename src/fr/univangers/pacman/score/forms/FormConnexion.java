@@ -26,8 +26,8 @@ public class FormConnexion {
 		String pass = (String) request.getAttribute(CHAMP_PASS);
 		Utilisateur utilisateur = daoUtilisateur.trouver(identifiant);
 		if(utilisateur != null) {
-			BCrypt.Result BCresultat = BCrypt.verifyer().verify(pass.toCharArray(), utilisateur.getMotDePasse());
-			if(BCresultat.verified) {
+			BCrypt.Result bresultat = BCrypt.verifyer().verify(pass.toCharArray(), utilisateur.getMotDePasse());
+			if(bresultat.verified) {
 				resultat = "Connexion réussie";
 			} else {
 				resultat = "Connexion échouée";
