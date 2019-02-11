@@ -44,7 +44,7 @@ public class FormPartie {
 	}
 	
 	public void delete(HttpServletRequest request, long id) {
-		daoPartie.supprimer(id);;
+		daoPartie.supprimer(id);
 	}
 	
 }
