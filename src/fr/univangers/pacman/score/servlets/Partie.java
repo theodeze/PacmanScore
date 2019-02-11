@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fr.univangers.pacman.score.config.InitialisationDaoFactory;
 import fr.univangers.pacman.score.dao.DAOFactory;
 import fr.univangers.pacman.score.dao.DAOPartie;
@@ -15,8 +18,9 @@ import fr.univangers.pacman.score.forms.FormPartie;
 @WebServlet("/Partie/*")
 public class Partie extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = LogManager.getLogger("Partie Servlet");
+    
     private DAOPartie daoPartie;
-	
 	
     @Override
     public void init() throws ServletException {
@@ -25,12 +29,25 @@ public class Partie extends HttpServlet {
         		InitialisationDaoFactory.ATT_DAO_FACTORY)).getDaoPartie();
     }
     
-    private void sendJson(HttpServletResponse response, String json) throws IOException {
-    	response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+    private void sendJson(HttpServletResponse response, String json) {
+        try {
+        	response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			LOGGER.warn("Problème envoie Json");
+		}
+    }
+    
+    private void sendError(HttpServletResponse response, int sc) {
+		try {
+			response.sendError(sc);
+		} catch (IOException e) {
+			LOGGER.warn("Problème envoie erreur");
+		}
     }
 
+    @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         FormPartie form = new FormPartie(daoPartie);
         
@@ -44,28 +61,38 @@ public class Partie extends HttpServlet {
 		String[] splits = pathInfo.split("/");
 		
 		if(splits.length != 2) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 
-		String id = splits[1];
-		String json = form.get(request, Integer.valueOf(id));
+		int id = 0;
+		try {
+			id = Integer.parseInt(splits[1]);
+		} catch(NumberFormatException e) {
+			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+		
+		String json = form.get(id);
 		if(json.equals("null")) {	
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
         sendJson(response, json);
 	}
 
+    @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		FormPartie form = new FormPartie(daoPartie);
         sendJson(response, form.post(request));
 	}
 
+    @Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		/* Modify value */
 	}
 
+    @Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         FormPartie form = new FormPartie(daoPartie);
 
@@ -73,18 +100,25 @@ public class Partie extends HttpServlet {
 
 		String[] splits = pathInfo.split("/");
 		if(splits.length != 2) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 
-		String id = splits[1];
-		String json = form.get(request, Integer.valueOf(id));
-		if(json.equals("null")) {	
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		int id = 0;
+		try {
+			id = Integer.parseInt(splits[1]);
+		} catch(NumberFormatException e) {
+			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 		
-		form.delete(request, Integer.valueOf(id));
+		String json = form.get(id);
+		if(json.equals("null")) {	
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
+		form.delete(id);
 		sendJson(response, json);
 	}
 
