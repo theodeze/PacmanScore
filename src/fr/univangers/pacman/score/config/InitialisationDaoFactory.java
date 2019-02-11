@@ -14,10 +14,12 @@ public class InitialisationDaoFactory implements ServletContextListener {
 
     private DAOFactory daoFactory;
 	
-    public InitialisationDaoFactory() {}
+    public InitialisationDaoFactory() { /* */ }
 
-    public void contextDestroyed(ServletContextEvent sce)  {}
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) { /* */ }
 
+    @Override
     public void contextInitialized(ServletContextEvent sce)  { 
         ServletContext servletContext = sce.getServletContext();
         this.daoFactory = DAOFactory.getInstance();

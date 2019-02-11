@@ -24,7 +24,7 @@ public class DAOUtilitaire {
 	        try {
 	            resultSet.close();
 	        } catch(SQLException e) {
-	        	LOGGER.warn("Échec de la fermeture du ResultSet : " + e.getMessage());
+	        	LOGGER.warn("Ã‰chec de la fermeture du ResultSet : " + e.getMessage());
 	        }
 	    }
 	}
@@ -34,7 +34,7 @@ public class DAOUtilitaire {
 	        try {
 	            statement.close();
 	        } catch(SQLException e) {
-	        	LOGGER.warn("Échec de la fermeture du Statement : " + e.getMessage());
+	        	LOGGER.warn("Ã‰chec de la fermeture du Statement : " + e.getMessage());
 	        }
 	    }
 	}
@@ -44,7 +44,7 @@ public class DAOUtilitaire {
 	        try {
 	            connexion.close();
 	        } catch(SQLException e) {
-	        	LOGGER.warn("Échec de la fermeture de la connexion : " + e.getMessage());
+	        	LOGGER.warn("Ã‰chec de la fermeture de la connexion : " + e.getMessage());
 	        }
 	    }
 	}
@@ -74,7 +74,7 @@ public class DAOUtilitaire {
     	try {
     		time = formatter.parse(date).getTime();
 		} catch (ParseException e) {
-			LOGGER.warn("Problème format date");
+			LOGGER.warn("ProblÃ¨me format date");
 		}
 		return new Timestamp(time);
     }

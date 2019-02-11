@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Partie</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.js"></script>
+  <script src="js/tableExport.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/extensions/export/bootstrap-table-export.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/locale/bootstrap-table-fr-FR.min.js"></script>
+  <script src="js/table.js"></script>
+
+  <style>
+    body {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      background-color: gainsboro;
+    }
+
+    .card-body {
+      background-color: whitesmoke;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="card">
+      <div class="card-header bg-info text-light text-center" id="headingOne">
+        <h2>Vos Statistique</h2>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li>Nombre de victoire</li>
+          <li>Nombre de défaite</li>
+          <li>Ratio</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header bg-info" id="headingOne">
+          <button class="btn btn-info collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+            aria-controls="collapseOne">
+            <h5>Classement Personnel</h5>
+          </button>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            <table id="classper"></table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header bg-info" id="headingTwo">
+          <button class="btn btn-info collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+            aria-controls="collapseTwo">
+            <h5>Classement General</h5>
+          </button>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body">
+            <table id="classgen"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    initTablePer('#classper', 'http://localhost:8080/Pacman_Score/Partie', 'Marc')
+    initTableGen('#classgen', 'http://localhost:8080/Pacman_Score/Partie')
+  </script>
+</body>
+
+</html>
