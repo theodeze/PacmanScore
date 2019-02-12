@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import fr.univangers.pacman.score.beans.Utilisateur;
 import fr.univangers.pacman.score.dao.DAOFactory;
+import fr.univangers.pacman.score.dao.DAOPartie;
 import fr.univangers.pacman.score.dao.DAOUtilisateur;
 import fr.univangers.pacman.score.forms.FormConnexion;
 import fr.univangers.pacman.score.forms.FormInscription;
@@ -28,6 +29,7 @@ public class User extends HttpServlet {
     private String email;
     
     private DAOUtilisateur daoUser;
+    //private DAOPartie daoparty;
 	private Utilisateur utilisateur;
 
        
@@ -36,11 +38,12 @@ public class User extends HttpServlet {
      */
     public User() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
+    @Override
     public void init() throws ServletException{
     	 this.daoUser = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDaoUtilisateur();
+    	 //this.daoparty = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDaoPartie();
     }
     
     public boolean validateMDP(String mdp_a_tester, Utilisateur dansLaBD) {
@@ -60,6 +63,7 @@ public class User extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+    @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
@@ -67,7 +71,8 @@ public class User extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
     	HttpSession session = request.getSession();
     	utilisateur = new Utilisateur();
     	
@@ -144,8 +149,8 @@ public class User extends HttpServlet {
 			result = validateMDP(pwd_email_modif,daoUser.trouver(old_email_modif_email));
 		
 			// Modification dans la DAO
-			//utilisateur.setEmail(new_email_modif);
-			
+			if(result)
+				daoUser.modifierEmail(utilisateur, new_email_modif);			
 		} 
     	
 		else if (email_modif_mdp!=null) {
@@ -153,11 +158,13 @@ public class User extends HttpServlet {
 			String old_pwd_modif_mdp = request.getParameter("old_MotDePasse_modif_mdp");
 			String pwd_modif_mdp = request.getParameter("MotDePasse_modif_mdp");
 			String pwd_modif_mdp_confirm = request.getParameter("MotDePasse_modif_mdp_confirm");
-			result = validateMDP(old_pwd_modif_mdp,daoUser.trouver(email_modif_mdp));
+			if(pwd_modif_mdp.equals(pwd_modif_mdp_confirm))
+					result = validateMDP(old_pwd_modif_mdp,daoUser.trouver(email_modif_mdp));
+			else result=false;
 		
 			// Modification dans la DAO
-			//utilisateur.setEmail(new_email_modif);
-			
+			if(result)
+				daoUser.modifierPass(utilisateur, pwd_modif_mdp);			
 		} 
     	
 		else if (email_modif_pseudo!=null) {
@@ -167,8 +174,8 @@ public class User extends HttpServlet {
 			result = validateMDP(pwd_modif_pseudo,daoUser.trouver(email_modif_pseudo));
 		
 			// Modification dans la DAO
-			//utilisateur.setEmail(new_email_modif);
-			
+			if(result)
+				daoUser.modifierPseudo(utilisateur, pseudo_modif_pseudo);			
 		} 
 
 		else if (email_suppr!=null) {			
@@ -179,10 +186,11 @@ public class User extends HttpServlet {
 			}
 			else {
 				if(email_suppr.equals(email)) {
-					daoUser.supprimer(email_suppr);				
+					daoUser.supprimer(email_suppr);
 					session.invalidate();
 		            session = request.getSession();
 					request.setAttribute( ATT_MSG_SUCCESS, "Compte supprimé avec succès");
+					session.setAttribute(ATT_SESSION_USER,null);
 				}
 				else 
 					request.setAttribute( ATT_MSG_WARNING, "Il ne s'agit pas de votre compte");

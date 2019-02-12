@@ -18,6 +18,27 @@
         <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js">
         </script>
     <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/locale/fr.js"></script>
+    
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.js"></script>
+  <script src="js/tableExport.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/extensions/export/bootstrap-table-export.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/locale/bootstrap-table-fr-FR.min.js"></script>
+  <script src="js/table.js"></script>
+  
+    <style>
+    body {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      background-color: gainsboro;
+    }
+
+    .card-body {
+      background-color: whitesmoke;
+    }
+  </style>
 
 </head>
 
@@ -301,8 +322,14 @@
                 </div>
                 <div class="col-md-3 table-bordered border-info table_score">
                     <h5>Score total</h5>
-                </div>
+                </div>                
             </div>
+            
+            <div class="row justify-content-center" v-if=v1_tab>
+            	<table id="classper" data-sort-name="date" data-sort-order="desc"></table>
+            </div>
+
+
 
             <div class="row justify-content-center pb-2 pt-4" v-if=v2_tab>
                 <div class="col-md-3 table-bordered border-info table_score">
@@ -317,6 +344,10 @@
                 <div class="col-md-3 table-bordered border-info table_score">
                     <h5>Résultat de la partie</h5>
                 </div>
+            </div>
+            
+            <div class="row justify-content-center" v-if=v2_tab>
+           		<table id="classgen" data-sort-name="score" data-sort-order="desc"></table>
             </div>
 
             <div class="pb-4 pt-4 text-center"><img src="<c:url value="/img/pacman.png"/>" alt="Personnages" width=500></div>
@@ -361,6 +392,10 @@
         </div>
     </div>
 
+ <script>
+    initTablePer('#classper', 'http://localhost:8080/Pacman_Score/Partie', 'Marc')
+    initTableGen('#classgen', 'http://localhost:8080/Pacman_Score/Partie')
+  </script>
 
     <script type="module" src="<c:url value="/js/vue.js"/>"> </script>
     <script type="module" src="<c:url value="/js/score_data.js"/>"> </script> </body> </html>

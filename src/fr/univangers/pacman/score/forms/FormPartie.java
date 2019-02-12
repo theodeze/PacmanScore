@@ -48,11 +48,7 @@ public class FormPartie {
 		return gson.toJson(partie);
 	}
 	
-<<<<<<< HEAD
-	public void delete(HttpServletRequest request, long id) {
-=======
 	public void delete(long id) {
->>>>>>> origin/TDE_dev
 		daoPartie.supprimer(id);
 	}
 	
