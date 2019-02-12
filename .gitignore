@@ -12,6 +12,7 @@
 
 # Eclipse
 .settings
+WebContent/WEB-INF/classes/
 
 # Package Files
 *.war
