@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import fr.univangers.pacman.score.beans.Utilisateur;
 import fr.univangers.pacman.score.dao.DAOFactory;
-import fr.univangers.pacman.score.dao.DAOPartie;
 import fr.univangers.pacman.score.dao.DAOUtilisateur;
 import fr.univangers.pacman.score.forms.FormConnexion;
 import fr.univangers.pacman.score.forms.FormInscription;
@@ -31,7 +30,6 @@ public class User extends HttpServlet {
     public static final String ATT_MSG_WARNING = "Warning";
     public static final String ATT_MSG_SUCCESS = "Success";
     public static final String ATT_FORM = "form";
-    private String email;
     
     private DAOUtilisateur daoUser;
        
@@ -46,21 +44,7 @@ public class User extends HttpServlet {
     public void init() throws ServletException{
     	 this.daoUser = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDaoUtilisateur();
     }
-    
-    public boolean validateMDP(String mdp_a_tester, Utilisateur dansLaBD) {
-    	if (dansLaBD!=null) {  	
-    		if (mdp_a_tester.equals(dansLaBD.getMotDePasse()))
-    			return true;
-    	}
-    	return false;
-    }
-    
-    public boolean validateNotExistInDB(Utilisateur dansLaBD) {
-    	if (dansLaBD==null) {  	
-   			return true;
-    	}
-    	return false;
-    }
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -75,17 +59,11 @@ public class User extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
     	HttpSession session = request.getSession();
-    	Utilisateur utilisateur = new Utilisateur();
-    	
+    	Utilisateur utilisateur = new Utilisateur();   	
     	boolean result = false;
-    	
-		String email_suppr=request.getParameter("Identifiant_suppr");				
-		String deconnexion = request.getParameter("Deconnexion_activate");
-						
 		String type = request.getParameter("Type");
-		if(type == null) {
 			
-		} else if(type.equals("Connexion")) {
+		if(type.equals("Connexion")) {
 			FormConnexion formConnexion = new FormConnexion(daoUser);	
 			utilisateur=formConnexion.connecterUtilisateur(request);
 			if(utilisateur == null) {
@@ -113,67 +91,67 @@ public class User extends HttpServlet {
 		}
 
 		else if(type.equals("Modif_email")) {
-			FormModifEmail form_modif_email = new FormModifEmail(daoUser);
-			request.setAttribute(ATT_FORM, form_modif_email);
-			result = form_modif_email.ModifEmailUtilisateur(request,utilisateur);
+			FormModifEmail formModifEmail = new FormModifEmail(daoUser);
+			request.setAttribute(ATT_FORM, formModifEmail);
+			result = formModifEmail.modifEmailUtilisateur(request,utilisateur);
 			if(result) {
-				request.setAttribute( ATT_MSG_SUCCESS, form_modif_email.getResultat());
+				request.setAttribute( ATT_MSG_SUCCESS, formModifEmail.getResultat());
 			}
 			else {
-				request.setAttribute( ATT_MSG_WARNING, form_modif_email.getResultat());
+				request.setAttribute( ATT_MSG_WARNING, formModifEmail.getResultat());
 			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);
 		}
 		
 		else if(type.equals("Modif_mdp")) {
-			FormModifMdp form_modif_mdp = new FormModifMdp(daoUser);
-			request.setAttribute(ATT_FORM, form_modif_mdp);
-			result= form_modif_mdp.ModifMDPUtilisateur(request,utilisateur);
+			FormModifMdp formModifMdp = new FormModifMdp(daoUser);
+			request.setAttribute(ATT_FORM, formModifMdp);
+			result= formModifMdp.modifMDPUtilisateur(request,utilisateur);
 			if(result) {
-				request.setAttribute( ATT_MSG_SUCCESS, form_modif_mdp.getResultat());
+				request.setAttribute( ATT_MSG_SUCCESS, formModifMdp.getResultat());
 			}
 			else {
-				request.setAttribute( ATT_MSG_WARNING, form_modif_mdp.getResultat());
+				request.setAttribute( ATT_MSG_WARNING, formModifMdp.getResultat());
 			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);		
 		}
 		
 		else if(type.equals("Modif_pseudo")) {
-			FormModifPseudo form_modif_pseudo = new FormModifPseudo(daoUser);
-			request.setAttribute(ATT_FORM, form_modif_pseudo);
-			result = form_modif_pseudo.ModifPseudoUtilisateur(request, utilisateur);
+			FormModifPseudo formModifPseudo = new FormModifPseudo(daoUser);
+			request.setAttribute(ATT_FORM, formModifPseudo);
+			result = formModifPseudo.modifPseudoUtilisateur(request, utilisateur);
 			if (result) {
-				request.setAttribute( ATT_MSG_SUCCESS, form_modif_pseudo.getResultat());
+				request.setAttribute( ATT_MSG_SUCCESS, formModifPseudo.getResultat());
 			}
 			else {
-				request.setAttribute( ATT_MSG_WARNING, form_modif_pseudo.getResultat());
+				request.setAttribute( ATT_MSG_WARNING, formModifPseudo.getResultat());
 			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);				
 		}
 		
 		else if(type.equals("Suppr")) {
-			FormSuppr form_suppr = new FormSuppr(daoUser);
-			utilisateur = form_suppr.SupprimerUtilisateur(request);
+			FormSuppr formSuppr = new FormSuppr(daoUser);
+			utilisateur = formSuppr.supprimerUtilisateur(request);
 			if (utilisateur!=null) {
-				request.setAttribute( ATT_MSG_SUCCESS, form_suppr.getResultat());
+				request.setAttribute( ATT_MSG_SUCCESS, formSuppr.getResultat());
 				session.invalidate();
 	            session = request.getSession();
 			}
 			else {
-				request.setAttribute( ATT_MSG_WARNING, form_suppr.getResultat());
+				request.setAttribute( ATT_MSG_WARNING, formSuppr.getResultat());
 			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);				
 		}		
 
     	
-		else if(deconnexion != null) {
+		else if(type.equals("deconnexion")) {
             // Supprime la session, ce qui déconnecte l'ulisateur (Doit être testé avant exécution)
             session.invalidate();
             session = request.getSession();
             session.setAttribute(ATT_MSG_SUCCESS, "Vous êtes déconnecté");
     		}	
+		
     	
 		doGet(request, response);
-	}	
-	
+	}		
 }

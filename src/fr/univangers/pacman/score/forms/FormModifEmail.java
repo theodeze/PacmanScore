@@ -34,16 +34,15 @@ public class FormModifEmail {
         this.daoUtilisateur = daoUtilisateur;
     }
 	
-	public boolean ModifEmailUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
-		String email_old = (String) request.getParameter(CHAMP_EMAIL_OLD);
-		String email = (String) request.getParameter(CHAMP_EMAIL);
-		String pass = (String) request.getParameter(CHAMP_PASS);
-		Utilisateur tmp = daoUtilisateur.trouver(email_old);
+	public boolean modifEmailUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
+		String emailOld = request.getParameter(CHAMP_EMAIL_OLD);
+		String email = request.getParameter(CHAMP_EMAIL);
+		String pass = request.getParameter(CHAMP_PASS);
+		Utilisateur tmp = daoUtilisateur.trouver(emailOld);
 		try {
 			if (tmp!=null && traiterPass(pass, tmp)) {
 				traiterEmail(email,tmp);
 				if(erreurs.isEmpty()) {
-					daoUtilisateur.modifierEmail(tmp, email);
 					resultat = "Modification réussite";
 					utilisateur = tmp ;
 					return true;
