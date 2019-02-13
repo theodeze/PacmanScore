@@ -45,7 +45,7 @@
                 <div class="btn-group" role="group">
                     <div class="pr-2"><button v-on:click="modification" class="btn btn-info" type="button">Modifier
                             Compte</button></div>
-                    <div class="pl-2"><form id="deconnexion" method="post"><button name="Deconnexion_activate" class="btn btn-danger" type="text">SE DECONNECTER</button></form></div>
+                    <div class="pl-2"><form id="button_deco" method="post"> <input type="hidden" name="Type" value="deconnexion" /><button name="Deconnexion_activate" class="btn btn-danger" type="submit">SE DECONNECTER</button></form></div>
                 </div>
             </c:if>
         </div>

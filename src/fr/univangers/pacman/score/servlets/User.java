@@ -17,6 +17,7 @@ import fr.univangers.pacman.score.forms.FormInscription;
 import fr.univangers.pacman.score.forms.FormModifEmail;
 import fr.univangers.pacman.score.forms.FormModifMdp;
 import fr.univangers.pacman.score.forms.FormModifPseudo;
+import fr.univangers.pacman.score.forms.FormSuppr;
 
 /**
  * Servlet implementation class User
@@ -152,28 +153,20 @@ public class User extends HttpServlet {
 		}
 		
 		else if(type.equals("Suppr")) {
-			
-			
-		}		
-
-		else if (email_suppr!=null) {			
-			String pwd_suppr = request.getParameter("MotDePasse_suppr");
-			result = validateMDP(pwd_suppr,daoUser.trouver(email_suppr));			
-			if(!result) {
-				request.setAttribute( ATT_MSG_WARNING, "Email et/ou mot de passe incorrect(s)");				
+			FormSuppr form_suppr = new FormSuppr(daoUser);
+			request.setAttribute(ATT_FORM, form_suppr);
+			utilisateur = form_suppr.SupprimerUtilisateur(request);
+			if (utilisateur!=null) {
+				request.setAttribute( ATT_MSG_SUCCESS, form_suppr.getResultat());
+				session.invalidate();
+	            session = request.getSession();
 			}
 			else {
-				if(email_suppr.equals(email)) {
-					daoUser.supprimer(email_suppr);
-					session.invalidate();
-		            session = request.getSession();
-					request.setAttribute( ATT_MSG_SUCCESS, "Compte supprimé avec succès");
-					session.setAttribute(ATT_SESSION_USER,null);
-				}
-				else 
-					request.setAttribute( ATT_MSG_WARNING, "Il ne s'agit pas de votre compte");
-			}			
-		} 
+				request.setAttribute( ATT_MSG_WARNING, form_suppr.getResultat());
+			}
+			session.setAttribute( ATT_SESSION_USER, utilisateur);				
+		}		
+
     	
 		else if(deconnexion != null) {
             // Supprime la session, ce qui déconnecte l'ulisateur (Doit être testé avant exécution)
