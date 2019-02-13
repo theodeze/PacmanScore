@@ -22,7 +22,7 @@ import fr.univangers.pacman.score.forms.FormInscription;
 public class User extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     public static final String CONF_DAO_FACTORY = "daofactory";
-	private static final String VUE = "/WEB-INF/jsp/User.jsp";
+	private static final String VUE = "/WEB-INF/jsp/User_Test.jsp";
 	public static final String ATT_SESSION_USER = "sessionUtilisateur";
     public static final String ATT_MSG_WARNING = "Warning";
     public static final String ATT_MSG_SUCCESS = "Success";
@@ -30,7 +30,6 @@ public class User extends HttpServlet {
     
     private DAOUtilisateur daoUser;
     //private DAOPartie daoparty;
-	private Utilisateur utilisateur;
 
        
     /**
@@ -74,7 +73,7 @@ public class User extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
     	HttpSession session = request.getSession();
-    	utilisateur = new Utilisateur();
+    	Utilisateur utilisateur = new Utilisateur();
     	
     	boolean result = false;
     	
@@ -87,15 +86,55 @@ public class User extends HttpServlet {
 				
 		String deconnexion = request.getParameter("Deconnexion_activate");
 				
-		FormConnexion formConnexion = new FormConnexion(daoUser);	
-		attribuerUtilisateur(formConnexion.connecterUtilisateur(request));
-
-		FormInscription formInscription = new FormInscription(daoUser);	
-		attribuerUtilisateur(formInscription.inscrireUtilisateur(request));
-
+		// Je veux m'inscire
 		
-		email=utilisateur.getEmail();
-		session.setAttribute( ATT_SESSION_USER, utilisateur);
+		String type = request.getParameter("Type");
+		if(type == null) {
+			
+		} else if(type.equals("Connexion")) {
+			FormConnexion formConnexion = new FormConnexion(daoUser);	
+			utilisateur=formConnexion.connecterUtilisateur(request);
+			if(utilisateur == null) {
+				request.setAttribute( ATT_MSG_WARNING, formConnexion.getResultat());
+				session.setAttribute( ATT_SESSION_USER, null);
+			}
+			else {
+				request.setAttribute( ATT_MSG_SUCCESS, formConnexion.getResultat());
+				session.setAttribute( ATT_SESSION_USER, utilisateur);
+			}
+				
+		} else if(type.equals("Inscription")) {
+			FormInscription formInscription = new FormInscription(daoUser);	
+			utilisateur=formInscription.inscrireUtilisateur(request);
+			if(utilisateur == null) {
+				request.setAttribute( ATT_MSG_WARNING, formInscription.getResultat());
+				session.setAttribute( ATT_SESSION_USER, null);
+			}
+			else {
+				request.setAttribute( ATT_MSG_SUCCESS, formInscription.getResultat());
+				session.setAttribute( ATT_SESSION_USER, utilisateur);
+			}		}
+
+		else if(type.equals("Modif_email")) {
+			
+			
+		}
+		
+		else if(type.equals("Modif_mdp")) {
+			
+			
+		}
+		
+		else if(type.equals("Modif_pseudo")) {
+			
+			
+		}
+		
+		else if(type.equals("Suppr")) {
+			
+			
+		}		
+		
 		
 		/*if(email_connexion!=null) {
 			email = email_connexion;
@@ -206,12 +245,5 @@ public class User extends HttpServlet {
     	
 		doGet(request, response);
 	}	
-	
-	private void attribuerUtilisateur(Utilisateur tmp) {
-		if(tmp != null) {
-			utilisateur = tmp;
-		}
-	}
-	
 	
 }

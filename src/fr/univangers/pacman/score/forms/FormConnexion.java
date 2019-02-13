@@ -22,8 +22,8 @@ public class FormConnexion {
     }
     
 	public Utilisateur connecterUtilisateur(HttpServletRequest request) {
-		String identifiant = (String) request.getAttribute(CHAMP_IDENTFIANT);
-		String pass = (String) request.getAttribute(CHAMP_PASS);
+		String identifiant = (String) request.getParameter(CHAMP_IDENTFIANT);
+		String pass = (String) request.getParameter(CHAMP_PASS);
 		Utilisateur utilisateur = daoUtilisateur.trouver(identifiant);
 		if(utilisateur != null) {
 			BCrypt.Result bresultat = BCrypt.verifyer().verify(pass.toCharArray(), utilisateur.getMotDePasse());

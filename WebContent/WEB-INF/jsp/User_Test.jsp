@@ -27,7 +27,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/extensions/export/bootstrap-table-export.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/locale/bootstrap-table-fr-FR.min.js"></script>
   <script src="js/table.js"></script>
-  
+
     <style>
     body {
       padding-top: 2rem;
@@ -46,7 +46,7 @@
     <div id="main">
         <c:import url="/jsp/Menu.jsp" />
 
-        <div class="container-fluid justify-content-center mb-4">
+        <div class="container-fluid justify-content-center mb-4 mt-4">
 
             <!-- TITRE PACMAN -->
 
@@ -115,7 +115,6 @@
                 <div class="border border-info mt-2" v-if=v1_account>
 
                     <div class="row justify-content-center">
-
                         <div class="col text-right"><button v-on:click="fermer" class="btn btn-info">X</button></div>
                     </div>
 
@@ -165,6 +164,10 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="justify-content-center pt-2 pl-2 pr-2 pb-2 mt-4 border border-info"><h5>Sur ce site vous pourrez visionner vos scores aux différentes parties de Pacman que vous ferez, ainsi que 
+                 comparer votre classement à celui des autres.</h5></div>                 
+                
             </c:if>
 
 
@@ -282,81 +285,39 @@
                     </div>
                 </div>
 
-                <div class="row justify-content-center pb-4 pt-4">
+               <div class="container">
 
-                    <div class="dropdown pr-1" id="show_gen">
-                        <button v-on:click="show_gen" class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton_classement"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Classement Personnel
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_classement">
-                            <a class="dropdown-item" href="#">Général</a>
-                            <a class="dropdown-item" href="#">Mensuel</a>
-                            <a class="dropdown-item" href="#">Hebdomadaire</a>
-                        </div>
-                    </div>
+       <div id="accordion">
+      <div class="card">
+        <div class="card-header bg-info" id="headingOne">
+          <button class="btn btn-info collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+            aria-controls="collapseOne">
+            <h5>Classement Personnel</h5>
+          </button>
+        </div>
 
-                    <!-- affichage des Scores -->
-
-
-                    <div class="dropdown pl-1" id="show_pers">
-                        <button v-on:click="show_perso" class="btn btn-outline-primary dropdown-toggle" type="button"
-                            id="dropdownMenuButton_personnel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Résultat par Partie
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_personnel">
-                            <a class="dropdown-item" href="#">Général</a>
-                            <a class="dropdown-item" href="#">Mensuel</a>
-                            <a class="dropdown-item" href="#">Hebdomadaire</a>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                <form id="search" class="form-signin" name="search_inDB" method="post">  
-					<div class="row justify-content-center">            	           
-			            	<div class="col-md-9"><input type="text" id="requete" name="requete_forDB" class="form-control" placeholder="Entrez votre requête..." required/></div>
-			            	<div class="col-md-3"><button class="btn btn-outline-primary" type="submit">Search</button></div>
-	           		</div>
-	            </form>
-            </c:if>        
-
-            <div class="row justify-content-center pb-2 pt-4" v-if=v1_tab>
-                <div class="col-md-3 table-bordered border-info table_score ">
-                    <h5>Classement</h5>
-                </div>
-                <div class="col-md-3 table-bordered border-info table_score">
-                    <h5>Pseudo</h5>
-                </div>
-                <div class="col-md-3 table-bordered border-info table_score">
-                    <h5>Score total</h5>
-                </div>                
-            </div>
-            
-            <div class="row justify-content-center" v-if=v1_tab>
-            	<table id="classper" data-sort-name="date" data-sort-order="desc"></table>
-            </div>
-
-
-
-            <div class="row justify-content-center pb-2 pt-4" v-if=v2_tab>
-                <div class="col-md-3 table-bordered border-info table_score">
-                    <h5>Pseudo</h5>
-                </div>
-                <div class="col-md-3 table-bordered border-info table_score">
-                    <h5>Date</h5>
-                </div>
-                <div class="col-md-3 table-bordered border-info table_score">
-                    <h5>Score</h5>
-                </div>
-                <div class="col-md-3 table-bordered border-info table_score">
-                    <h5>Résultat de la partie</h5>
-                </div>
-            </div>
-            
-            <div class="row justify-content-center" v-if=v2_tab>
-           		<table id="classgen" data-sort-name="score" data-sort-order="desc"></table>
-            </div>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            <table id="classper" class="table_score" data-sort-name="date" data-sort-order="desc"></table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header bg-info" id="headingTwo">
+          <button class="btn btn-info collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+            aria-controls="collapseTwo">
+            <h5>Classement General</h5>
+          </button>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body">
+            <table id="classgen" class="table_score" data-sort-name="score" data-sort-order="desc"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </c:if>
 
             <div class="pb-4 pt-4 text-center"><img src="<c:url value="/img/pacman.png"/>" alt="Personnages" width=500></div>
 
@@ -382,8 +343,7 @@
                                 <label for="email_suppr">Email</label>
                             </div>
                             <div class="form-label-group">
-                                <input type="password" id="mdp_suppr" name="MotDePasse_suppr" class="form-control"
-                                    required>
+                                <input type="password" id="mdp_suppr" name="MotDePasse_suppr" class="form-control" required>
                                 <label for="mdp_suppr">Mot de passe</label>
                             </div>
                             
@@ -402,10 +362,13 @@
         </div>
     </div>
 
- <script>
-    initTablePer('#classper', 'http://localhost:8080/Pacman_Score/Partie', 'Marc')
-    initTableGen('#classgen', 'http://localhost:8080/Pacman_Score/Partie')
-  </script>
+ 
 
     <script type="module" src="<c:url value="/js/vue.js"/>"> </script>
-    <script type="module" src="<c:url value="/js/score_data.js"/>"> </script> </body> </html>
+    
+    <script>
+    initTablePer('#classper', 'http://localhost:8080/Pacman_Score/Partie', sessionScope.sessionUtilisateur.getPseudo());
+    initTableGen('#classgen', 'http://localhost:8080/Pacman_Score/Partie');
+  </script>
+    
+     </body> </html>
