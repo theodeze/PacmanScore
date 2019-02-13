@@ -37,17 +37,17 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
     		+ TABLE_NAME		+ " WHERE "
     		+ COLUMN_EMAIL		+ " = ?";
 	private static final String SQL_UPDATE_PSEUDO = "UPDATE "
-			+ TABLE_NAME		+ " "
-		    + COLUMN_ID			+ " = ? WHERE "
-			+ COLUMN_PSEUDO		+ " = ?";
+			+ TABLE_NAME		+ " SET "
+			+ COLUMN_PSEUDO		+ " = ? WHERE "
+		    + COLUMN_ID			+ " = ?";
 	private static final String SQL_UPDATE_EMAIL = "UPDATE "
-			+ TABLE_NAME		+ " "
-			+ COLUMN_ID			+ " = ? WHERE "
-			+ COLUMN_EMAIL		+ " = ?";
+			+ TABLE_NAME		+ " SET "
+			+ COLUMN_EMAIL		+ " = ? WHERE "
+			+ COLUMN_ID			+ " = ?";
 	private static final String SQL_UPDATE_PASSWORD = "UPDATE "
-			+ TABLE_NAME		+ " "
-			+ COLUMN_ID			+ " = ? WHERE "
-			+ COLUMN_PASSWORD	+ " = ?";
+			+ TABLE_NAME		+ " SET "
+			+ COLUMN_PASSWORD	+ " = ? WHERE "
+			+ COLUMN_ID			+ " = ?";
 
     public DAOUtilisateurImpl(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
