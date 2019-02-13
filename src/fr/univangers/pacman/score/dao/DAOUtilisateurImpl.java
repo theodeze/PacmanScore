@@ -103,7 +103,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 
 	    try {
 	        connexion = daoFactory.getConnection();
-	        preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT_PAR_IDENTIFIANT, false, identifiant);
+	        preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT_PAR_IDENTIFIANT, false, identifiant, identifiant);
 	        resultSet = preparedStatement.executeQuery();
 	        if(resultSet.next()) {
 	            utilisateur = map(resultSet);

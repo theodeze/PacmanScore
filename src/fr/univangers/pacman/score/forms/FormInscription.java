@@ -17,7 +17,7 @@ public class FormInscription {
     private static final String CHAMP_PSEUDO     = "Pseudo_inscription";
 
     private String              resultat;
-    private Map<String, String> erreurs          = new HashMap<String, String>();    
+    private Map<String, String> erreurs          = new HashMap<>();    
     private DAOUtilisateur 		daoUtilisateur;
     
     public String getResultat() {
@@ -33,10 +33,10 @@ public class FormInscription {
     }
 	
 	public Utilisateur inscrireUtilisateur(HttpServletRequest request) {
-		String email = (String) request.getAttribute(CHAMP_EMAIL);
-		String pass = (String) request.getAttribute(CHAMP_PASS);
-		String conf = (String) request.getAttribute(CHAMP_CONF);
-		String pseudo = (String) request.getAttribute(CHAMP_PSEUDO);
+		String email = (String) request.getParameter(CHAMP_EMAIL);
+		String pass = (String) request.getParameter(CHAMP_PASS);
+		String conf = (String) request.getParameter(CHAMP_CONF);
+		String pseudo = (String) request.getParameter(CHAMP_PSEUDO);
 		Utilisateur utilisateur = new Utilisateur();
 		try {
 			traiterEmail(email, utilisateur);
@@ -47,9 +47,11 @@ public class FormInscription {
 				resultat = "Inscription réussite";
 			} else {
 				resultat = "Echec inscription";
+				utilisateur = null;
 			}
 		} catch(DAOException e) {
             resultat = "Échec de l'inscription : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
+			utilisateur = null;
 		}
 		return utilisateur;
 	}
