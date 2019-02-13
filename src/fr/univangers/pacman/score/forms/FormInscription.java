@@ -11,7 +11,7 @@ import fr.univangers.pacman.score.dao.DAOException;
 import fr.univangers.pacman.score.dao.DAOUtilisateur;
 
 public class FormInscription {
-    private static final String CHAMP_EMAIL      = "Identifiant_inscription";
+	private static final String CHAMP_EMAIL      = "Identifiant_inscription";
     private static final String CHAMP_PASS       = "MotDePasse_inscription";
     private static final String CHAMP_CONF       = "MotDePasse_inscription_confirmation";
     private static final String CHAMP_PSEUDO     = "Pseudo_inscription";
@@ -66,7 +66,9 @@ public class FormInscription {
 	}
 	
 	private void validationEmail(String email) throws FormException {
-		if(email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?"
+		if(email == null)
+			 throw new FormException("Merci de saisir un email.");
+		else if(!email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?"
 				+ ":[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09"
 				+ "\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9]("
 				+ "?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:"
@@ -86,13 +88,15 @@ public class FormInscription {
 	}
 	
 	private void validationPass(String pass, String conf) throws FormException {
-		if(!pass.equals(conf))
-			throw new FormException("Les deux mots de passe ne corresponde pas");
+		if(pass == null || conf == null)
+			 throw new FormException("Merci de saisir et de confirmer votre mot de passe.");
+		else if(!pass.equals(conf))
+			throw new FormException("Les deux mots de passe ne corresponde pas.");
 		else if(pass.length() < 8)
-			throw new FormException("Les mots de passe doit avoir une taille supperieur à 8");
+			throw new FormException("Les mots de passe doit avoir une taille supperieur à 8.");
 		else if(!pass.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])$"))
 			throw new FormException("Les mots de passe doit être composé d'une miniscule, "
-					+ "une majuscule et un chiffre");
+					+ "une majuscule et un chiffre.");
 			
 	}
 	
@@ -106,10 +110,12 @@ public class FormInscription {
 	}
 	
 	private void validationPseudo(String pseudo) throws FormException {
-		if(pseudo.length() < 8)
-			throw new FormException("Le pseudo doit avoir une taille supperieur à 8");
+		if(pseudo == null)
+			 throw new FormException("Merci de saisir votre pseudo.");
+		else if(pseudo.length() < 4)
+			throw new FormException("Le pseudo doit avoir une taille supperieur à 4.");
 		else if(!pseudo.matches(""))
-			throw new FormException("Le pseudo n'est pas valide");
+			throw new FormException("Le pseudo n'est pas valide.");
 	}
 	
     private void setErreur(String champ, String message) {
