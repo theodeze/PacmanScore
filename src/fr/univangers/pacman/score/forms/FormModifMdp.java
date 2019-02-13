@@ -36,7 +36,7 @@ public class FormModifMdp {
         this.daoUtilisateur = daoUtilisateur;
     }
 	
-	public void ModifMDPUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
+	public boolean ModifMDPUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
 		String email = (String) request.getParameter(CHAMP_EMAIL);
 		String pass_old = (String) request.getParameter(CHAMP_PASS_OLD);
 		String pass = (String) request.getParameter(CHAMP_PASS);
@@ -46,18 +46,23 @@ public class FormModifMdp {
 			if(tmp!=null && verifOldMdp(pass_old,tmp)) {
 				traiterPass(pass, conf, tmp);
 				if(erreurs.isEmpty()) {
-					daoUtilisateur.modifierPass(tmp, pass);
+					daoUtilisateur.modifierPass(tmp, BCrypt.withDefaults().hashToString(12, pass.toCharArray()));
 					resultat = "Modification réussite";
 					utilisateur = tmp;
+					return true;
 					
 				} else {
 					resultat = "Echec modification";
+					return false;
 				}
 			}
-			else 
+			else {
 				resultat = "Echec modification";
+				return false;
+			}
 		} catch(DAOException e) {
             resultat = "Échec de la modification : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
+            return false;
 		}
 	}
 	

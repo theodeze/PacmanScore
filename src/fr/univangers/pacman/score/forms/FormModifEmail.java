@@ -13,7 +13,7 @@ import fr.univangers.pacman.score.dao.DAOUtilisateur;
 public class FormModifEmail {
 	private static final String CHAMP_EMAIL_OLD      = "Old_Identifiant_modif_email";
 	private static final String CHAMP_EMAIL      = "Identifiant_modif_email";
-    private static final String CHAMP_PASS       = "MotDePasse_inscription";
+    private static final String CHAMP_PASS       = "MotDePasse_modif_email";
     
     private static final String PATTERN_MAIL	= 
     		"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -34,28 +34,31 @@ public class FormModifEmail {
         this.daoUtilisateur = daoUtilisateur;
     }
 	
-	public void ModifEmailUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
+	public boolean ModifEmailUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
 		String email_old = (String) request.getParameter(CHAMP_EMAIL_OLD);
 		String email = (String) request.getParameter(CHAMP_EMAIL);
 		String pass = (String) request.getParameter(CHAMP_PASS);
-		Utilisateur tmp = daoUtilisateur.trouver(email);
-
+		Utilisateur tmp = daoUtilisateur.trouver(email_old);
 		try {
-			if (tmp!=null && traiterPass(pass, tmp).verified) {
+			if (tmp!=null && traiterPass(pass, tmp)) {
 				traiterEmail(email,tmp);
 				if(erreurs.isEmpty()) {
 					daoUtilisateur.modifierEmail(tmp, email);
 					resultat = "Modification réussite";
 					utilisateur = tmp ;
+					return true;
 				}
 				else {
 					resultat = "Echec modification";
+					return false;
 				}
 			} else {
 				resultat = "Echec modification";
+				return false;
 			}
 		} catch(DAOException e) {
             resultat = "Échec de la modification : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
+            return false;
 		}
 	}
 	
@@ -75,9 +78,8 @@ public class FormModifEmail {
 			throw new FormException("L'email est invalide");
 	}
 	
-	private BCrypt.Result traiterPass(String pass, Utilisateur utilisateur) {
-		BCrypt.Result bresultat = BCrypt.verifyer().verify(pass.toCharArray(), utilisateur.getMotDePasse());
-		return bresultat;
+	private boolean traiterPass(String pass, Utilisateur utilisateur) {
+		return BCrypt.verifyer().verify(pass.toCharArray(), utilisateur.getMotDePasse()).verified;
 	}
 	
 	

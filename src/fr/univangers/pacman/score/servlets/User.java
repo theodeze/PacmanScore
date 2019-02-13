@@ -78,13 +78,7 @@ public class User extends HttpServlet {
     	
     	boolean result = false;
     	
-    	/*String email_connexion=request.getParameter("Identifiant_connexion");
-		String email_inscription=request.getParameter("Identifiant_inscription");*/
-		String old_email_modif_email=request.getParameter("Old_Identifiant_modif_email");
-		String email_modif_mdp=request.getParameter("Identifiant_modif_mdp");
-		String email_modif_pseudo=request.getParameter("Identifiant_modif_pseudo");
-		String email_suppr=request.getParameter("Identifiant_suppr");
-				
+		String email_suppr=request.getParameter("Identifiant_suppr");				
 		String deconnexion = request.getParameter("Deconnexion_activate");
 						
 		String type = request.getParameter("Type");
@@ -100,9 +94,10 @@ public class User extends HttpServlet {
 			else {
 				request.setAttribute( ATT_MSG_SUCCESS, formConnexion.getResultat());
 				session.setAttribute( ATT_SESSION_USER, utilisateur);
-			}
-				
-		} else if(type.equals("Inscription")) {
+			}	
+		} 
+		
+		else if(type.equals("Inscription")) {
 			FormInscription formInscription = new FormInscription(daoUser);	
 			utilisateur=formInscription.inscrireUtilisateur(request);
 			request.setAttribute(ATT_FORM, formInscription);
@@ -113,29 +108,45 @@ public class User extends HttpServlet {
 			else {
 				request.setAttribute( ATT_MSG_SUCCESS, formInscription.getResultat());
 				session.setAttribute( ATT_SESSION_USER, utilisateur);
-			}		}
+			}		
+		}
 
 		else if(type.equals("Modif_email")) {
 			FormModifEmail form_modif_email = new FormModifEmail(daoUser);
 			request.setAttribute(ATT_FORM, form_modif_email);
-			form_modif_email.ModifEmailUtilisateur(request,utilisateur);
-			request.setAttribute( ATT_MSG_WARNING, form_modif_email.getResultat());
+			result = form_modif_email.ModifEmailUtilisateur(request,utilisateur);
+			if(result) {
+				request.setAttribute( ATT_MSG_SUCCESS, form_modif_email.getResultat());
+			}
+			else {
+				request.setAttribute( ATT_MSG_WARNING, form_modif_email.getResultat());
+			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);
 		}
 		
 		else if(type.equals("Modif_mdp")) {
 			FormModifMdp form_modif_mdp = new FormModifMdp(daoUser);
 			request.setAttribute(ATT_FORM, form_modif_mdp);
-			form_modif_mdp.ModifMDPUtilisateur(request,utilisateur);
-			request.setAttribute( ATT_MSG_WARNING, form_modif_mdp.getResultat());
+			result= form_modif_mdp.ModifMDPUtilisateur(request,utilisateur);
+			if(result) {
+				request.setAttribute( ATT_MSG_SUCCESS, form_modif_mdp.getResultat());
+			}
+			else {
+				request.setAttribute( ATT_MSG_WARNING, form_modif_mdp.getResultat());
+			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);		
 		}
 		
 		else if(type.equals("Modif_pseudo")) {
 			FormModifPseudo form_modif_pseudo = new FormModifPseudo(daoUser);
 			request.setAttribute(ATT_FORM, form_modif_pseudo);
-			form_modif_pseudo.ModifPseudoUtilisateur(request, utilisateur);
-			request.setAttribute( ATT_MSG_WARNING, form_modif_pseudo.getResultat());
+			result = form_modif_pseudo.ModifPseudoUtilisateur(request, utilisateur);
+			if (result) {
+				request.setAttribute( ATT_MSG_SUCCESS, form_modif_pseudo.getResultat());
+			}
+			else {
+				request.setAttribute( ATT_MSG_WARNING, form_modif_pseudo.getResultat());
+			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);		
 			
 		}
@@ -144,88 +155,6 @@ public class User extends HttpServlet {
 			
 			
 		}		
-		
-		
-		/*if(email_connexion!=null) {
-			email = email_connexion;
-		}
-		else if (email_inscription != null) {
-			email = email_inscription;
-		}d
-
-    	if (email_connexion!=null) {
-	    	utilisateur.setEmail(email_connexion);
-	    	String mdp = request.getParameter("MotDePasse_connexion");
-			utilisateur.setMotDePasse(mdp);
-					
-			result = validateMDP(mdp,daoUser.trouver(email_connexion));
-			if(!result) {
-				request.setAttribute( ATT_MSG_WARNING, "Email et/ou mot de passe incorrect(s)");
-				session.setAttribute( ATT_SESSION_USER, null);
-			}
-			else {
-				request.setAttribute( ATT_MSG_SUCCESS, "Vous êtes connecté");
-				session.setAttribute( ATT_SESSION_USER, utilisateur);
-			}
-    	}
-			
-		 else if (email_inscription!=null) {
-			String mdp = request.getParameter("MotDePasse_inscription");
-			String confirm = request.getParameter("MotDePasse_inscription_confirmation");
-
-			if (mdp.equals(confirm)) {
-		    	utilisateur.setEmail(email_inscription);
-				String pseudo = request.getParameter("Pseudo_inscription");
-				utilisateur.setPseudo(pseudo);
-				utilisateur.setMotDePasse(mdp);
-				
-				result = validateNotExistInDB(daoUser.trouver(email_inscription));
-				if(!result) {
-					request.setAttribute( ATT_MSG_WARNING, "Email déjà utilisé");
-					session.setAttribute( ATT_SESSION_USER, null);
-				}
-				else {				
-					daoUser.creer(utilisateur);
-					request.setAttribute( ATT_MSG_SUCCESS, "Inscrit avec succès");
-					session.setAttribute( ATT_SESSION_USER, utilisateur);
-				}		
-			}
-		}  
-    	
-		if (old_email_modif_email!=null) {
-			String new_email_modif = request.getParameter("Identifiant_modif_email");
-			String pwd_email_modif = request.getParameter("MotDePasse_modif_email");
-			result = validateMDP(pwd_email_modif,daoUser.trouver(old_email_modif_email));
-		
-			// Modification dans la DAO
-			if(result)
-				daoUser.modifierEmail(utilisateur, new_email_modif);			
-		} 
-    	
-		else if (email_modif_mdp!=null) {
-			
-			String old_pwd_modif_mdp = request.getParameter("old_MotDePasse_modif_mdp");
-			String pwd_modif_mdp = request.getParameter("MotDePasse_modif_mdp");
-			String pwd_modif_mdp_confirm = request.getParameter("MotDePasse_modif_mdp_confirm");
-			if(pwd_modif_mdp.equals(pwd_modif_mdp_confirm))
-					result = validateMDP(old_pwd_modif_mdp,daoUser.trouver(email_modif_mdp));
-			else result=false;
-		
-			// Modification dans la DAO
-			if(result)
-				daoUser.modifierPass(utilisateur, pwd_modif_mdp);			
-		} 
-    	
-		else if (email_modif_pseudo!=null) {
-			
-			String pseudo_modif_pseudo = request.getParameter("Pseudo_modif_pseudo");
-			String pwd_modif_pseudo = request.getParameter("MotDePasse_modif_pseudo");
-			result = validateMDP(pwd_modif_pseudo,daoUser.trouver(email_modif_pseudo));
-		
-			// Modification dans la DAO
-			if(result)
-				daoUser.modifierPseudo(utilisateur, pseudo_modif_pseudo);			
-		} */
 
 		else if (email_suppr!=null) {			
 			String pwd_suppr = request.getParameter("MotDePasse_suppr");

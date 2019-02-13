@@ -34,7 +34,7 @@ public class FormModifPseudo {
         this.daoUtilisateur = daoUtilisateur;
     }
 	
-	public void ModifPseudoUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
+	public boolean ModifPseudoUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
 		String email = (String) request.getParameter(CHAMP_EMAIL);
 		String pass = (String) request.getParameter(CHAMP_PASS);
 		String pseudo = (String) request.getParameter(CHAMP_PSEUDO);
@@ -45,15 +45,19 @@ public class FormModifPseudo {
 					traiterPseudo(pseudo,utilisateur);
 					resultat = "Modification réussite";
 					utilisateur = tmp;
+					return true;
 				} else {
 					resultat = "Echec modification";
+					return false;
 				}
 			}
 			else {
 				resultat = "Echec modification";
+				return false;
 			}
 		} catch(DAOException e) {
             resultat = "Échec de la modification : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
+            return false;
 		}
 	}
 	
