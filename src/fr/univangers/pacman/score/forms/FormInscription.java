@@ -114,6 +114,8 @@ public class FormInscription {
 			 throw new FormException("Merci de saisir votre pseudo.");
 		else if(pseudo.length() < 4)
 			throw new FormException("Le pseudo doit avoir une taille supperieur à 4.");
+		else if(daoUtilisateur.trouver(pseudo) != null)
+			throw new FormException("Le pseudo est déja utilisé.");
 	}
 	
     private void setErreur(String champ, String message) {
