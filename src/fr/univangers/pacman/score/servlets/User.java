@@ -14,6 +14,9 @@ import fr.univangers.pacman.score.dao.DAOPartie;
 import fr.univangers.pacman.score.dao.DAOUtilisateur;
 import fr.univangers.pacman.score.forms.FormConnexion;
 import fr.univangers.pacman.score.forms.FormInscription;
+import fr.univangers.pacman.score.forms.FormModifEmail;
+import fr.univangers.pacman.score.forms.FormModifMdp;
+import fr.univangers.pacman.score.forms.FormModifPseudo;
 
 /**
  * Servlet implementation class User
@@ -22,15 +25,14 @@ import fr.univangers.pacman.score.forms.FormInscription;
 public class User extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     public static final String CONF_DAO_FACTORY = "daofactory";
-	private static final String VUE = "/WEB-INF/jsp/User_Test.jsp";
+	private static final String VUE = "/WEB-INF/jsp/User.jsp";
 	public static final String ATT_SESSION_USER = "sessionUtilisateur";
     public static final String ATT_MSG_WARNING = "Warning";
     public static final String ATT_MSG_SUCCESS = "Success";
+    public static final String ATT_FORM = "form";
     private String email;
     
     private DAOUtilisateur daoUser;
-    //private DAOPartie daoparty;
-
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -42,7 +44,6 @@ public class User extends HttpServlet {
     @Override
     public void init() throws ServletException{
     	 this.daoUser = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDaoUtilisateur();
-    	 //this.daoparty = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDaoPartie();
     }
     
     public boolean validateMDP(String mdp_a_tester, Utilisateur dansLaBD) {
@@ -85,9 +86,7 @@ public class User extends HttpServlet {
 		String email_suppr=request.getParameter("Identifiant_suppr");
 				
 		String deconnexion = request.getParameter("Deconnexion_activate");
-				
-		// Je veux m'inscire
-		
+						
 		String type = request.getParameter("Type");
 		if(type == null) {
 			
@@ -106,6 +105,7 @@ public class User extends HttpServlet {
 		} else if(type.equals("Inscription")) {
 			FormInscription formInscription = new FormInscription(daoUser);	
 			utilisateur=formInscription.inscrireUtilisateur(request);
+			request.setAttribute(ATT_FORM, formInscription);
 			if(utilisateur == null) {
 				request.setAttribute( ATT_MSG_WARNING, formInscription.getResultat());
 				session.setAttribute( ATT_SESSION_USER, null);
@@ -116,17 +116,27 @@ public class User extends HttpServlet {
 			}		}
 
 		else if(type.equals("Modif_email")) {
-			
-			
+			FormModifEmail form_modif_email = new FormModifEmail(daoUser);
+			request.setAttribute(ATT_FORM, form_modif_email);
+			form_modif_email.ModifEmailUtilisateur(request,utilisateur);
+			request.setAttribute( ATT_MSG_WARNING, form_modif_email.getResultat());
+			session.setAttribute( ATT_SESSION_USER, utilisateur);
 		}
 		
 		else if(type.equals("Modif_mdp")) {
-			
-			
+			FormModifMdp form_modif_mdp = new FormModifMdp(daoUser);
+			request.setAttribute(ATT_FORM, form_modif_mdp);
+			form_modif_mdp.ModifMDPUtilisateur(request,utilisateur);
+			request.setAttribute( ATT_MSG_WARNING, form_modif_mdp.getResultat());
+			session.setAttribute( ATT_SESSION_USER, utilisateur);		
 		}
 		
 		else if(type.equals("Modif_pseudo")) {
-			
+			FormModifPseudo form_modif_pseudo = new FormModifPseudo(daoUser);
+			request.setAttribute(ATT_FORM, form_modif_pseudo);
+			form_modif_pseudo.ModifPseudoUtilisateur(request, utilisateur);
+			request.setAttribute( ATT_MSG_WARNING, form_modif_pseudo.getResultat());
+			session.setAttribute( ATT_SESSION_USER, utilisateur);		
 			
 		}
 		
@@ -180,7 +190,7 @@ public class User extends HttpServlet {
 					session.setAttribute( ATT_SESSION_USER, utilisateur);
 				}		
 			}
-		}  */
+		}  
     	
 		if (old_email_modif_email!=null) {
 			String new_email_modif = request.getParameter("Identifiant_modif_email");
@@ -215,7 +225,7 @@ public class User extends HttpServlet {
 			// Modification dans la DAO
 			if(result)
 				daoUser.modifierPseudo(utilisateur, pseudo_modif_pseudo);			
-		} 
+		} */
 
 		else if (email_suppr!=null) {			
 			String pwd_suppr = request.getParameter("MotDePasse_suppr");
