@@ -16,6 +16,11 @@ public class FormInscription {
     private static final String CHAMP_CONF       = "MotDePasse_inscription_confirmation";
     private static final String CHAMP_PSEUDO     = "Pseudo_inscription";
 
+    private static final String PATTERN_MAIL	= 
+    		"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final String PATTERN_PASS 	=
+    		"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+    
     private String              resultat;
     private Map<String, String> erreurs          = new HashMap<>();    
     private DAOUtilisateur 		daoUtilisateur;
@@ -68,12 +73,7 @@ public class FormInscription {
 	private void validationEmail(String email) throws FormException {
 		if(email == null)
 			 throw new FormException("Merci de saisir un email.");
-		else if(!email.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?"
-				+ ":[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09"
-				+ "\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9]("
-				+ "?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:"
-				+ "25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x"
-				+ "0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"))
+		else if(!email.matches(PATTERN_MAIL))
 			throw new FormException("L'email est invalide");
 	}
 	
@@ -94,7 +94,7 @@ public class FormInscription {
 			throw new FormException("Les deux mots de passe ne corresponde pas.");
 		else if(pass.length() < 8)
 			throw new FormException("Les mots de passe doit avoir une taille supperieur à 8.");
-		else if(!pass.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])$"))
+		else if(!pass.matches(PATTERN_PASS))
 			throw new FormException("Les mots de passe doit être composé d'une miniscule, "
 					+ "une majuscule et un chiffre.");
 			
@@ -114,8 +114,6 @@ public class FormInscription {
 			 throw new FormException("Merci de saisir votre pseudo.");
 		else if(pseudo.length() < 4)
 			throw new FormException("Le pseudo doit avoir une taille supperieur à 4.");
-		else if(!pseudo.matches(""))
-			throw new FormException("Le pseudo n'est pas valide.");
 	}
 	
     private void setErreur(String champ, String message) {
