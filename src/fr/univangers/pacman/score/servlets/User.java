@@ -148,13 +148,11 @@ public class User extends HttpServlet {
 			else {
 				request.setAttribute( ATT_MSG_WARNING, form_modif_pseudo.getResultat());
 			}
-			session.setAttribute( ATT_SESSION_USER, utilisateur);		
-			
+			session.setAttribute( ATT_SESSION_USER, utilisateur);				
 		}
 		
 		else if(type.equals("Suppr")) {
 			FormSuppr form_suppr = new FormSuppr(daoUser);
-			request.setAttribute(ATT_FORM, form_suppr);
 			utilisateur = form_suppr.SupprimerUtilisateur(request);
 			if (utilisateur!=null) {
 				request.setAttribute( ATT_MSG_SUCCESS, form_suppr.getResultat());

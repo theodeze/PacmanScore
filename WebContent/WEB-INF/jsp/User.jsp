@@ -83,6 +83,18 @@
                     <c:if test="${not empty form.erreurs['MotDePasse_inscription']}">
                     	<li><c:out value="${form.erreurs['MotDePasse_inscription']}" /></li>
                     </c:if>
+                    
+                     <c:if test="${not empty form.erreurs['Identifiant_modif_email']}">
+	                    <li><c:out value="${form.erreurs['Identifiant_modif_email']}" /></li>
+                    </c:if>
+                    
+                    <c:if test="${not empty form.erreurs['MotDePasse_modif_mdp']}">
+                    	<li><c:out value="${form.erreurs['MotDePasse_modif_mdp']}" /></li>
+                    </c:if>
+                    
+                    <c:if test="${not empty form.erreurs['Pseudo_modif_pseudo']}">
+                    	<li><c:out value="${form.erreurs['Pseudo_modif_pseudo']}" /></li>
+                    </c:if>
                     </ul>
                     
                     <c:remove var="Warning" scope="session" />
