@@ -11,10 +11,10 @@ import fr.univangers.pacman.score.dao.DAOException;
 import fr.univangers.pacman.score.dao.DAOUtilisateur;
 
 public class FormInscription {
-    private static final String CHAMP_EMAIL      = "email";
-    private static final String CHAMP_PASS       = "motdepasse";
-    private static final String CHAMP_CONF       = "confirmation";
-    private static final String CHAMP_PSEUDO     = "pseudo";
+    private static final String CHAMP_EMAIL      = "Identifiant_inscription";
+    private static final String CHAMP_PASS       = "MotDePasse_inscription";
+    private static final String CHAMP_CONF       = "MotDePasse_inscription_confirmation";
+    private static final String CHAMP_PSEUDO     = "Pseudo_inscription";
 
     private String              resultat;
     private Map<String, String> erreurs          = new HashMap<String, String>();    

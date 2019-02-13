@@ -7,8 +7,8 @@ import fr.univangers.pacman.score.beans.Utilisateur;
 import fr.univangers.pacman.score.dao.DAOUtilisateur;
 
 public class FormConnexion {
-    private static final String CHAMP_IDENTFIANT = "identifiant";
-    private static final String CHAMP_PASS       = "motdepasse";
+    private static final String CHAMP_IDENTFIANT = "Identifiant_connexion";
+    private static final String CHAMP_PASS       = "MotDePasse_connexion";
 
     private String              resultat;
     private DAOUtilisateur 		daoUtilisateur;

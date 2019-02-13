@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import fr.univangers.pacman.score.beans.Utilisateur;
 import fr.univangers.pacman.score.dao.DAOFactory;
 import fr.univangers.pacman.score.dao.DAOUtilisateur;
+import fr.univangers.pacman.score.forms.FormConnexion;
+import fr.univangers.pacman.score.forms.FormInscription;
 
 /**
  * Servlet implementation class User
@@ -26,6 +28,8 @@ public class User extends HttpServlet {
     private String email;
     
     private DAOUtilisateur daoUser;
+	private Utilisateur utilisateur;
+
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -65,24 +69,35 @@ public class User extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	HttpSession session = request.getSession();
-    	Utilisateur utilisateur = new Utilisateur();	
+    	utilisateur = new Utilisateur();
     	
     	boolean result = false;
-    	String email_connexion=request.getParameter("Identifiant_connexion");
-		String email_inscription=request.getParameter("Identifiant_inscription");
+    	
+    	/*String email_connexion=request.getParameter("Identifiant_connexion");
+		String email_inscription=request.getParameter("Identifiant_inscription");*/
 		String old_email_modif_email=request.getParameter("Old_Identifiant_modif_email");
 		String email_modif_mdp=request.getParameter("Identifiant_modif_mdp");
 		String email_modif_pseudo=request.getParameter("Identifiant_modif_pseudo");
 		String email_suppr=request.getParameter("Identifiant_suppr");
 				
 		String deconnexion = request.getParameter("Deconnexion_activate");
+				
+		FormConnexion formConnexion = new FormConnexion(daoUser);	
+		attribuerUtilisateur(formConnexion.connecterUtilisateur(request));
+
+		FormInscription formInscription = new FormInscription(daoUser);	
+		attribuerUtilisateur(formInscription.inscrireUtilisateur(request));
+
 		
-		if(email_connexion!=null) {
+		email=utilisateur.getEmail();
+		session.setAttribute( ATT_SESSION_USER, utilisateur);
+		
+		/*if(email_connexion!=null) {
 			email = email_connexion;
 		}
 		else if (email_inscription != null) {
 			email = email_inscription;
-		}
+		}d
 
     	if (email_connexion!=null) {
 	    	utilisateur.setEmail(email_connexion);
@@ -99,8 +114,8 @@ public class User extends HttpServlet {
 				session.setAttribute( ATT_SESSION_USER, utilisateur);
 			}
     	}
-		
-		else if (email_inscription!=null) {
+			
+		 else if (email_inscription!=null) {
 			String mdp = request.getParameter("MotDePasse_inscription");
 			String confirm = request.getParameter("MotDePasse_inscription_confirmation");
 
@@ -110,7 +125,7 @@ public class User extends HttpServlet {
 				utilisateur.setPseudo(pseudo);
 				utilisateur.setMotDePasse(mdp);
 				
-				result = validateNotExistInDB(daoUser.trouver(email_connexion));
+				result = validateNotExistInDB(daoUser.trouver(email_inscription));
 				if(!result) {
 					request.setAttribute( ATT_MSG_WARNING, "Email déjà utilisé");
 					session.setAttribute( ATT_SESSION_USER, null);
@@ -121,9 +136,9 @@ public class User extends HttpServlet {
 					session.setAttribute( ATT_SESSION_USER, utilisateur);
 				}		
 			}
-		}  
+		}  */
     	
-		else if (old_email_modif_email!=null) {
+		if (old_email_modif_email!=null) {
 			String new_email_modif = request.getParameter("Identifiant_modif_email");
 			String pwd_email_modif = request.getParameter("MotDePasse_modif_email");
 			result = validateMDP(pwd_email_modif,daoUser.trouver(old_email_modif_email));
@@ -163,7 +178,6 @@ public class User extends HttpServlet {
 				request.setAttribute( ATT_MSG_WARNING, "Email et/ou mot de passe incorrect(s)");				
 			}
 			else {
-				System.out.println(email);
 				if(email_suppr.equals(email)) {
 					daoUser.supprimer(email_suppr);				
 					session.invalidate();
@@ -184,4 +198,12 @@ public class User extends HttpServlet {
     	
 		doGet(request, response);
 	}	
+	
+	private void attribuerUtilisateur(Utilisateur tmp) {
+		if(tmp != null) {
+			utilisateur = tmp;
+		}
+	}
+	
+	
 }
