@@ -125,7 +125,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	    try {
 	        connexion = daoFactory.getConnection();
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE_EMAIL, false, 
-	        		utilisateur.getId(), email);
+	        		email, utilisateur.getId());
 	        preparedStatement.executeUpdate();
 	        utilisateur.setEmail(email);
 	    } catch(SQLException e) {
@@ -143,7 +143,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	    try {
 	        connexion = daoFactory.getConnection();
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE_PSEUDO, false, 
-	        		utilisateur.getId(), pseudo);
+	        		pseudo, utilisateur.getId());
 	        preparedStatement.executeUpdate();
 	        utilisateur.setPseudo(pseudo);
 	    } catch(SQLException e) {
@@ -161,7 +161,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	    try {
 	        connexion = daoFactory.getConnection();
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE_PASSWORD, false, 
-	        		utilisateur.getId(), motDePasse);
+	        		motDePasse, utilisateur.getId());
 	        preparedStatement.executeUpdate();
 	        utilisateur.setMotDePasse(motDePasse);
 	    } catch(SQLException e) {
