@@ -19,34 +19,13 @@
         </script>
     <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/locale/fr.js"></script>
     
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.js"></script>
-  <script src="js/tableExport.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/extensions/export/bootstrap-table-export.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/locale/bootstrap-table-fr-FR.min.js"></script>
-  <script src="js/table.js"></script>
-  
-    <style>
-    body {
-      padding-top: 2rem;
-      padding-bottom: 2rem;
-      background-color: gainsboro;
-    }
-
-    .card-body {
-      background-color: whitesmoke;
-    }
-  </style>
-
 </head>
 
 <body>
     <div id="main">
         <c:import url="/jsp/Menu.jsp" />
 
-        <div class="container-fluid justify-content-center mb-4">
+        <div class="container-fluid justify-content-center">
 
             <!-- TITRE PACMAN -->
 
@@ -71,6 +50,20 @@
                 <div class="alert alert-warning alert-dismissible" role="alert">
                     <strong>Attention</strong>
                     <c:out value="${Warning}" />
+					<ul>
+                    <c:if test="${not empty form.erreurs['Identifiant_inscription']}">
+	                    <li><c:out value="${form.erreurs['Identifiant_inscription']}" /></li>
+                    </c:if>
+                    
+                    <c:if test="${not empty form.erreurs['Pseudo_inscription']}">
+                    	<li><c:out value="${form.erreurs['Pseudo_inscription']}" /></li>
+                    </c:if>
+                    
+                    <c:if test="${not empty form.erreurs['MotDePasse_inscription']}">
+                    	<li><c:out value="${form.erreurs['MotDePasse_inscription']}" /></li>
+                    </c:if>
+                    </ul>
+                    
                     <c:remove var="Warning" scope="session" />
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -80,7 +73,7 @@
 
             <!-- CONNEXION AU COMPTE / CREATION -->
             <c:if test="${empty sessionScope.sessionUtilisateur}">
-
+            
                 <div class="border border-info mt-2" v-if=v2_account>
 
                     <div class="row justify-content-center">
@@ -128,11 +121,12 @@
                                     <input type="text" id="email_inscription" name="Identifiant_inscription" class="form-control"
                                         required>
                                     <label for="email_inscription">Email</label>
-                                </div>
+                                                                        
+                                 </div>
                                 <div class="form-label-group">
                                     <input type="text" id="pseudo_inscription" name="Pseudo_inscription" class="form-control"
                                         required>
-                                    <label for="pseudo_inscription">Pseudo</label>
+                                    <label for="pseudo_inscription">Pseudo</label>                                                                      
                                 </div>
 
                                 <div class="form-label-group">
@@ -168,7 +162,7 @@
             </c:if>
 
 
-            <c:if test="${!empty sessionScope.sessionUtilisateur}">
+            <c:if test="${not empty sessionScope.sessionUtilisateur}">
                 <!-- Modification du profil -->
                 <div class="border border-info mt-2" v-if=v_modif>
 
@@ -401,11 +395,6 @@
             </div>
         </div>
     </div>
-
- <script>
-    initTablePer('#classper', 'http://localhost:8080/Pacman_Score/Partie', 'Marc')
-    initTableGen('#classgen', 'http://localhost:8080/Pacman_Score/Partie')
-  </script>
 
     <script type="module" src="<c:url value="/js/vue.js"/>"> </script>
     <script type="module" src="<c:url value="/js/score_data.js"/>"> </script> </body> </html>
