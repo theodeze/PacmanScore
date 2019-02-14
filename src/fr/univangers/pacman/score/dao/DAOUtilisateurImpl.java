@@ -59,7 +59,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_CREATE, false);
 	        int statut = preparedStatement.executeUpdate();
 	        if(statut != 0) {
-	            throw new DAOException("Echec de la création de la table partie.");
+	            throw new DAOException("Echec de la création de la table utilisateur.");
 	        }
 	    } catch(SQLException e) {
 	        throw new DAOException(e);

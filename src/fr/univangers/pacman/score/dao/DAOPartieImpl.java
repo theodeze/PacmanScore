@@ -73,7 +73,7 @@ public class DAOPartieImpl implements DAOPartie {
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_CREATE, false);
 	        int statut = preparedStatement.executeUpdate();
 	        if(statut != 0) {
-	            throw new DAOException("Ã‰chec de la crÃ©ation de la table partie.");
+	            throw new DAOException("Échec de la création de la table partie.");
 	        }
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
@@ -93,13 +93,13 @@ public class DAOPartieImpl implements DAOPartie {
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, partie.getPseudo(), partie.getScore(), partie.isVictoire());
 	        int statut = preparedStatement.executeUpdate();
 	        if(statut == 0) {
-	            throw new DAOException("Ã‰chec de la crÃ©ation de la partie, aucune ligne ajoutÃ©e dans la table.");
+	            throw new DAOException("Échec de la création de la partie, aucune ligne ajoutée dans la table.");
 	        }
 	        valeursAutoGenerees = preparedStatement.getGeneratedKeys();
 	        if(valeursAutoGenerees.next()) {
 	            partie.setId(valeursAutoGenerees.getLong(1));
 	        } else {
-	            throw new DAOException("Ã‰chec de la crÃ©ation de la partie en base, aucun ID auto-gÃ©nÃ©rÃ© retournÃ©.");
+	            throw new DAOException("Échec de la création de la partie en base, aucun ID auto-généré retourné.");
 	        }
 	    } catch(SQLException e) {
 	        throw new DAOException(e);

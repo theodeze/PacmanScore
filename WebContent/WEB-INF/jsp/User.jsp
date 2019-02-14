@@ -9,24 +9,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="<c:url value="/img/ghost_blue.png"/>"> <title>Accueil - PacmanScore</title>
+ 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.js"></script>
+	<script src="js/tableExport.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/extensions/export/bootstrap-table-export.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/locale/bootstrap-table-fr-FR.min.js"></script>
+	<script src="js/table.js"></script>
 
-    <link rel="stylesheet" href="<c:url value="/css/bootstrap.min.css"/>"> <link rel="stylesheet" href="<c:url value="/css/Accueil.css"/>">
-       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> 
-<script src="<c:url value="/js/vue.min.js"/>"> </script>
-        <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js">
-        </script>
+	<script src="<c:url value="/js/vue.min.js"/>"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/locale/fr.js"></script>
-    
+
+	<link rel="stylesheet" href="<c:url value="/css/Accueil.css"/>">    
     <!-- Pour les Parties -->
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/bootstrap-table.min.js"></script>
-  <script src="js/tableExport.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/extensions/export/bootstrap-table-export.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.4/locale/bootstrap-table-fr-FR.min.js"></script>
-  <script src="js/table.js"></script>
   
   <style>
     body {
@@ -322,7 +325,7 @@
         <div class="card-header bg-info" id="headingOne">
           <button class="btn btn-info collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
             aria-controls="collapseOne">
-            <h5>Classement Personnel</h5>
+            <h5>Historique</h5>
           </button>
         </div>
 
@@ -336,7 +339,7 @@
         <div class="card-header bg-info" id="headingTwo">
           <button class="btn btn-info collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
             aria-controls="collapseTwo">
-            <h5>Classement Général</h5>
+            <h5>Classement</h5>
           </button>
         </div>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
@@ -398,9 +401,12 @@
     
     
     <script>
-    initTablePer('#classper', 'http://localhost:8080/Pacman_Score/Partie', 'Adann');
-    initTableGen('#classgen', 'http://localhost:8080/Pacman_Score/Partie');
+    $('#classper').ready(function () {
+    	initTablePer('#classper', 'http://localhost:8080/Pacman_Score/Partie', '${sessionScope.sessionUtilisateur.pseudo}');
+    });
+    $('#classgen').ready(function () {
+    	initTableGen('#classgen', 'http://localhost:8080/Pacman_Score/Partie');
+    });
   </script>
 
-    <script type="module" src="<c:url value="/js/vue.js"/>"> </script>
-    <script type="module" src="<c:url value="/js/score_data.js"/>"> </script> </body> </html>
+    <script type="module" src="<c:url value="/js/vue.js"/>"> </script></body> </html>
