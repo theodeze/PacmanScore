@@ -50,7 +50,12 @@ public class User extends HttpServlet {
 	 */
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+    	try {
+    		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+    	}
+    	catch(Exception e) {
+    		
+    	}
 	}
 
 	/**
@@ -60,7 +65,6 @@ public class User extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
     	HttpSession session = request.getSession();
     	Utilisateur utilisateur = new Utilisateur();   	
-    	boolean result = false;
 		String type = request.getParameter("Type");
 			
 		if(type.equals("Connexion")) {
@@ -93,12 +97,13 @@ public class User extends HttpServlet {
 		else if(type.equals("Modif_email")) {
 			FormModifEmail formModifEmail = new FormModifEmail(daoUser);
 			request.setAttribute(ATT_FORM, formModifEmail);
-			result = formModifEmail.modifEmailUtilisateur(request,utilisateur);
-			if(result) {
+			Utilisateur userTmp = formModifEmail.modifEmailUtilisateur(request);
+			if(userTmp == null) {
 				request.setAttribute( ATT_MSG_SUCCESS, formModifEmail.getResultat());
 			}
 			else {
 				request.setAttribute( ATT_MSG_WARNING, formModifEmail.getResultat());
+				utilisateur = userTmp;
 			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);
 		}
@@ -106,12 +111,13 @@ public class User extends HttpServlet {
 		else if(type.equals("Modif_mdp")) {
 			FormModifMdp formModifMdp = new FormModifMdp(daoUser);
 			request.setAttribute(ATT_FORM, formModifMdp);
-			result= formModifMdp.modifMDPUtilisateur(request,utilisateur);
-			if(result) {
+			Utilisateur userTmp = formModifMdp.modifMDPUtilisateur(request);
+			if(userTmp == null) {
 				request.setAttribute( ATT_MSG_SUCCESS, formModifMdp.getResultat());
 			}
 			else {
 				request.setAttribute( ATT_MSG_WARNING, formModifMdp.getResultat());
+				utilisateur = userTmp;
 			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);		
 		}
@@ -119,12 +125,13 @@ public class User extends HttpServlet {
 		else if(type.equals("Modif_pseudo")) {
 			FormModifPseudo formModifPseudo = new FormModifPseudo(daoUser);
 			request.setAttribute(ATT_FORM, formModifPseudo);
-			result = formModifPseudo.modifPseudoUtilisateur(request, utilisateur);
-			if (result) {
+			Utilisateur userTmp = formModifPseudo.modifPseudoUtilisateur(request);
+			if (userTmp == null) {
 				request.setAttribute( ATT_MSG_SUCCESS, formModifPseudo.getResultat());
 			}
 			else {
 				request.setAttribute( ATT_MSG_WARNING, formModifPseudo.getResultat());
+				utilisateur = userTmp;
 			}
 			session.setAttribute( ATT_SESSION_USER, utilisateur);				
 		}
@@ -151,7 +158,11 @@ public class User extends HttpServlet {
             session.setAttribute(ATT_MSG_SUCCESS, "Vous êtes déconnecté");
     		}	
 		
-    	
-		doGet(request, response);
+    	try {
+    		doGet(request, response);
+    	}
+    	catch(Exception e) {
+    		
+    	}
 	}		
 }
