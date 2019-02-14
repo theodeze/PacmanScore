@@ -74,8 +74,10 @@ public class FormModifMdp {
 			} catch (FormException e) {
 				setErreur(CHAMP_PASS, e.getMessage());
 			}
-			String cryptPass = BCrypt.withDefaults().hashToString(12, pass.toCharArray());	
-			daoUtilisateur.modifierPass(utilisateur, cryptPass);			
+			if (pass != null) {
+				String cryptPass = BCrypt.withDefaults().hashToString(12, pass.toCharArray());	
+				daoUtilisateur.modifierPass(utilisateur, cryptPass);	
+			}
 	}
 	
 	private void validationPass(String pass, String conf) throws FormException {

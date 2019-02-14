@@ -1,9 +1,11 @@
 package fr.univangers.pacman.score.beans;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Utilisateur {
+public class Utilisateur implements Serializable{
 
+	private static final long serialVersionUID = 1407707866919058257L;
 	private long id;
 	private String email;
 	private String motDePasse;
