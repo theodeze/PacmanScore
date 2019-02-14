@@ -122,7 +122,6 @@ public class DAOPartieImpl implements DAOPartie {
 	        while(resultSet.next()) {
 	        	parties.add(map(resultSet));
 	        }
-	        resultSet.close();
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
 	    } finally {
@@ -146,7 +145,6 @@ public class DAOPartieImpl implements DAOPartie {
 	        while(resultSet.next()) {
 	        	parties.add(map(resultSet));
 	        }
-	        resultSet.close();
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
 	    } finally {
@@ -170,7 +168,6 @@ public class DAOPartieImpl implements DAOPartie {
 	        if(resultSet.next()) {
 	        	partie = map(resultSet);
 	        }
-	        resultSet.close();
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
 	    } finally {
@@ -211,7 +208,6 @@ public class DAOPartieImpl implements DAOPartie {
 	        while(resultSet.next()) {
 	        	parties.add(map(resultSet));
 	        }
-	        resultSet.close();
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
 	    } finally {

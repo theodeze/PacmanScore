@@ -175,7 +175,6 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	public void supprimer(String email) throws DAOException {
 	    Connection connexion = null;
 	    PreparedStatement preparedStatement = null;
-	    ResultSet resultSet = null;
 
 	    try {
 	        connexion = daoFactory.getConnection();
@@ -184,7 +183,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
 	    } catch(SQLException e) {
 	        throw new DAOException(e);
 	    } finally {
-	        fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+	        fermeturesSilencieuses(preparedStatement, connexion);
 	    }
 	}
 
