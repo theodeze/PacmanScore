@@ -36,28 +36,32 @@ public class FormModifMdp {
         this.daoUtilisateur = daoUtilisateur;
     }
 	
-	public void ModifMDPUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
-		String email = (String) request.getParameter(CHAMP_EMAIL);
-		String pass_old = (String) request.getParameter(CHAMP_PASS_OLD);
-		String pass = (String) request.getParameter(CHAMP_PASS);
-		String conf = (String) request.getParameter(CHAMP_CONF);
+	public boolean modifMDPUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
+		String email = request.getParameter(CHAMP_EMAIL);
+		String passOld = request.getParameter(CHAMP_PASS_OLD);
+		String pass = request.getParameter(CHAMP_PASS);
+		String conf = request.getParameter(CHAMP_CONF);
 		Utilisateur tmp = daoUtilisateur.trouver(email);
 		try {
-			if(tmp!=null && verifOldMdp(pass_old,tmp)) {
+			if(tmp!=null && verifOldMdp(passOld,tmp)) {
 				traiterPass(pass, conf, tmp);
 				if(erreurs.isEmpty()) {
-					daoUtilisateur.modifierPass(tmp, pass);
 					resultat = "Modification réussite";
 					utilisateur = tmp;
+					return true;
 					
 				} else {
 					resultat = "Echec modification";
+					return false;
 				}
 			}
-			else 
+			else {
 				resultat = "Echec modification";
+				return false;
+			}
 		} catch(DAOException e) {
             resultat = "Échec de la modification : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
+            return false;
 		}
 	}
 	
@@ -66,13 +70,13 @@ public class FormModifMdp {
 	}
 		
 	private void traiterPass(String pass, String conf, Utilisateur utilisateur) {
-		try {
-			validationPass(pass, conf);
-		} catch (FormException e) {
-			setErreur(CHAMP_PASS, e.getMessage());
-		}
-		String cryptPass = BCrypt.withDefaults().hashToString(12, pass.toCharArray());	
-		daoUtilisateur.modifierPass(utilisateur, cryptPass);
+			try {
+				validationPass(pass, conf);
+			} catch (FormException e) {
+				setErreur(CHAMP_PASS, e.getMessage());
+			}
+			String cryptPass = BCrypt.withDefaults().hashToString(12, pass.toCharArray());	
+			daoUtilisateur.modifierPass(utilisateur, cryptPass);			
 	}
 	
 	private void validationPass(String pass, String conf) throws FormException {

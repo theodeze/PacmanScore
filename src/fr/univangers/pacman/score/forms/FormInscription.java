@@ -38,10 +38,10 @@ public class FormInscription {
     }
 	
 	public Utilisateur inscrireUtilisateur(HttpServletRequest request) {
-		String email = (String) request.getParameter(CHAMP_EMAIL);
-		String pass = (String) request.getParameter(CHAMP_PASS);
-		String conf = (String) request.getParameter(CHAMP_CONF);
-		String pseudo = (String) request.getParameter(CHAMP_PSEUDO);
+		String email = request.getParameter(CHAMP_EMAIL);
+		String pass = request.getParameter(CHAMP_PASS);
+		String conf = request.getParameter(CHAMP_CONF);
+		String pseudo = request.getParameter(CHAMP_PSEUDO);
 		Utilisateur utilisateur = new Utilisateur();
 		try {
 			traiterEmail(email, utilisateur);
@@ -80,11 +80,14 @@ public class FormInscription {
 	private void traiterPass(String pass, String conf, Utilisateur utilisateur) {
 		try {
 			validationPass(pass, conf);
+			
 		} catch (FormException e) {
 			setErreur(CHAMP_PASS, e.getMessage());
 		}
-		String cryptPass = BCrypt.withDefaults().hashToString(12, pass.toCharArray());	
-		utilisateur.setMotDePasse(cryptPass);
+		if(pass!=null) {
+			String cryptPass = BCrypt.withDefaults().hashToString(12, pass.toCharArray());	
+			utilisateur.setMotDePasse(cryptPass);
+		}
 	}
 	
 	private void validationPass(String pass, String conf) throws FormException {

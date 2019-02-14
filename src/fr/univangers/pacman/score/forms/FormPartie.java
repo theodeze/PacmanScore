@@ -22,7 +22,7 @@ public class FormPartie {
     }
     
 	public String get(HttpServletRequest request) {
-		String pseudo = (String) request.getParameter(CHAMP_PSEUDO);
+		String pseudo = request.getParameter(CHAMP_PSEUDO);
 		List<Partie> resultat = null;
 		if(pseudo != null)
 			resultat = daoPartie.trouverParPseudo(pseudo);
