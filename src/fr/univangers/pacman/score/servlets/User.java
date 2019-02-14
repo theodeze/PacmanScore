@@ -160,9 +160,5 @@ public class User extends HttpServlet {
 		session.invalidate();
         return request.getSession();
         
-	}
-	
-	
-	
-	
+	}	
 }
