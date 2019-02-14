@@ -34,30 +34,29 @@ public class FormModifPseudo {
         this.daoUtilisateur = daoUtilisateur;
     }
 	
-	public boolean modifPseudoUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
+	public Utilisateur modifPseudoUtilisateur(HttpServletRequest request) {
 		String email = request.getParameter(CHAMP_EMAIL);
 		String pass = request.getParameter(CHAMP_PASS);
 		String pseudo = request.getParameter(CHAMP_PSEUDO);
-		Utilisateur tmp = daoUtilisateur.trouver(email);
+		Utilisateur user = daoUtilisateur.trouver(email);
 		try {
-			if(tmp!=null && verifMdp(pass,tmp)) {
-				traiterPseudo(pseudo,tmp);
+			if(user!=null && verifMdp(pass,user)) {
+				traiterPseudo(pseudo,user);
 				if(erreurs.isEmpty()) {
 					resultat = "Modification réussite";
-					utilisateur = tmp;
-					return true;
+					return user;
 				} else {
 					resultat = "Echec modification";
-					return false;
+					return null;
 				}
 			}
 			else {
 				resultat = "Echec modification";
-				return false;
+				return null;
 			}
 		} catch(DAOException e) {
             resultat = "Échec de la modification : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
-            return false;
+            return null;
 		}
 	}
 	

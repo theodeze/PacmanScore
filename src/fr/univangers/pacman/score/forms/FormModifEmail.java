@@ -34,30 +34,29 @@ public class FormModifEmail {
         this.daoUtilisateur = daoUtilisateur;
     }
 	
-	public boolean modifEmailUtilisateur(HttpServletRequest request, Utilisateur utilisateur) {
+	public Utilisateur modifEmailUtilisateur(HttpServletRequest request) {
 		String emailOld = request.getParameter(CHAMP_EMAIL_OLD);
 		String email = request.getParameter(CHAMP_EMAIL);
 		String pass = request.getParameter(CHAMP_PASS);
-		Utilisateur tmp = daoUtilisateur.trouver(emailOld);
+		Utilisateur user = daoUtilisateur.trouver(emailOld);
 		try {
-			if (tmp!=null && traiterPass(pass, tmp)) {
-				traiterEmail(email,tmp);
+			if (user!=null && traiterPass(pass, user)) {
+				traiterEmail(email,user);
 				if(erreurs.isEmpty()) {
 					resultat = "Modification réussite";
-					utilisateur = tmp ;
-					return true;
+					return user;
 				}
 				else {
 					resultat = "Echec modification";
-					return false;
+					return null;
 				}
 			} else {
 				resultat = "Echec modification";
-				return false;
+				return null;
 			}
 		} catch(DAOException e) {
             resultat = "Échec de la modification : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
-            return false;
+            return null;
 		}
 	}
 	
