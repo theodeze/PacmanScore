@@ -31,7 +31,7 @@ public class DAOUtilisateurImpl implements DAOUtilisateur {
     		+ COLUMN_PSEUDO		+ TEXT_NOT_NULL
     		+ COLUMN_EMAIL		+ TEXT_NOT_NULL
     		+ COLUMN_PASSWORD	+ TEXT_NOT_NULL
-    		+ COLUMN_TOKEN		+ TEXT_NOT_NULL
+    		+ COLUMN_TOKEN		+ " TEXT, "
     		+ COLUMN_DATE_INS	+ " TIMESTAMP NOT NULL)";
     private static final String SQL_INSERT = "INSERT INTO "
     		+ TABLE_NAME 		+ "("

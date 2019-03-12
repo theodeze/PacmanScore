@@ -403,10 +403,10 @@
     
     <script>
     $('#classper').ready(function () {
-    	initTablePer('#classper', 'http://localhost:8080/Pacman_Score/Partie', '${sessionScope.sessionUtilisateur.pseudo}');
+    	initTablePer('#classper', '<c:url value="/Partie"/>', '${sessionScope.sessionUtilisateur.pseudo}');
     });
     $('#classgen').ready(function () {
-    	initTableGen('#classgen', 'http://localhost:8080/Pacman_Score/Partie');
+    	initTableGen('#classgen', '<c:url value="/Partie"/>');
     });
   </script>
 
