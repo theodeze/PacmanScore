@@ -38,33 +38,33 @@ public class FormModifPseudo {
 		String email = request.getParameter(CHAMP_EMAIL);
 		String pass = request.getParameter(CHAMP_PASS);
 		String pseudo = request.getParameter(CHAMP_PSEUDO);
-		Utilisateur user = daoUtilisateur.trouver(email);
+		Utilisateur utilisateur = null;
 		try {
-			if(user!=null && verifMdp(pass,user)) {
-				traiterPseudo(pseudo,user);
+			utilisateur = daoUtilisateur.trouver(email);
+			if(utilisateur !=null && verifMdp(pass,utilisateur)) {
+				traiterPseudo(pseudo,utilisateur);
 				if(erreurs.isEmpty()) {
 					resultat = "Modification réussite";
-					return user;
 				} else {
 					resultat = "Echec modification";
-					return null;
+					utilisateur = null;
 				}
-			}
-			else {
+			} else {
 				resultat = "Echec modification";
-				return null;
+				utilisateur = null;
 			}
 		} catch(DAOException e) {
             resultat = "Échec de la modification : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
-            return null;
+            utilisateur = null;
 		}
+		return utilisateur;
 	}
 	
 	private boolean verifMdp(String pwd, Utilisateur utilisateur) {
 		return BCrypt.verifyer().verify(pwd.toCharArray(), utilisateur.getMotDePasse()).verified;
 	}
 	
-	private void traiterPseudo(String pseudo,Utilisateur utilisateur) {
+	private void traiterPseudo(String pseudo,Utilisateur utilisateur) throws DAOException {
 		try {
 			validationPseudo(pseudo);
 		} catch(FormException e) {

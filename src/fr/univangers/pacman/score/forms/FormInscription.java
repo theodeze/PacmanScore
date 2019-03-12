@@ -80,7 +80,6 @@ public class FormInscription {
 	private void traiterPass(String pass, String conf, Utilisateur utilisateur) {
 		try {
 			validationPass(pass, conf);
-			
 		} catch (FormException e) {
 			setErreur(CHAMP_PASS, e.getMessage());
 		}
@@ -106,13 +105,13 @@ public class FormInscription {
 	private void traiterPseudo(String pseudo, Utilisateur utilisateur) {
 		try {
 			validationPseudo(pseudo);
-		} catch(FormException e) {
+		} catch(FormException | DAOException e) {
 			setErreur(CHAMP_PSEUDO, e.getMessage());
 		}
 		utilisateur.setPseudo(pseudo);
 	}
 	
-	private void validationPseudo(String pseudo) throws FormException {
+	private void validationPseudo(String pseudo) throws FormException, DAOException {
 		if(pseudo == null)
 			 throw new FormException("Merci de saisir votre pseudo.");
 		else if(pseudo.length() < 4)

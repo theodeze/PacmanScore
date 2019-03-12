@@ -15,6 +15,16 @@ import fr.univangers.pacman.score.beans.Partie;
 public class DAOPartieImpl implements DAOPartie {
 
 	private DAOFactory daoFactory;
+
+	public static final String TABLE_NAME 		= "Partie";
+	public static final String COLUMN_ID 		= "id";
+	public static final String COLUMN_SCORE 	= "score";
+	public static final String COLUMN_PSEUDO 	= "pseudo";
+	public static final String COLUMN_DATE 		= "date";
+	public static final String COLUMN_VICTORY 	= "victoire";
+	public static final String SELECT 			= "SELECT ";
+	public static final String FROM 			= " FROM ";
+	public static final String WHERE 			= " WHERE ";
     private static final String SQL_CREATE = "CREATE TABLE IF NOT EXISTS "
     		+ TABLE_NAME 		+ "("
     		+ COLUMN_ID			+ " INTEGER NOT NULL PRIMARY KEY, "
@@ -28,39 +38,40 @@ public class DAOPartieImpl implements DAOPartie {
     		+ COLUMN_SCORE		+ ", "
     		+ COLUMN_VICTORY	+ ", "
     		+ COLUMN_DATE		+ ") VALUES(?, ?, ?, CURRENT_TIMESTAMP)";
-    private static final String SQL_SELECT_PAR_PSEUDO = "SELECT "
+    private static final String SQL_SELECT_PAR_PSEUDO = SELECT
     		+ COLUMN_ID			+ ", "
     		+ COLUMN_PSEUDO		+ ", "
     		+ COLUMN_SCORE		+ ", "
     		+ COLUMN_VICTORY	+ ", "
-    		+ COLUMN_DATE		+ " FROM "
-    		+ TABLE_NAME		+ " WHERE "
+    		+ COLUMN_DATE		+ FROM
+    		+ TABLE_NAME		+ WHERE
     		+ COLUMN_PSEUDO		+ " = ?";
-    private static final String SQL_SELECT_PAR_ID = "SELECT "
+    private static final String SQL_SELECT_PAR_ID = SELECT
     		+ COLUMN_ID			+ ", "
     		+ COLUMN_PSEUDO		+ ", "
     		+ COLUMN_SCORE		+ ", "
     		+ COLUMN_VICTORY	+ ", "
-    		+ COLUMN_DATE		+ " FROM "
-    		+ TABLE_NAME		+ " WHERE "
+    		+ COLUMN_DATE		+ FROM
+    		+ TABLE_NAME		+ WHERE
     		+ COLUMN_ID			+ " = ?";
-    private static final String SQL_SELECT_PAR_DATE = "SELECT "
+    private static final String SQL_SELECT_PAR_DATE = SELECT
     		+ COLUMN_ID			+ ", "
     		+ COLUMN_PSEUDO		+ ", "
     		+ COLUMN_SCORE		+ ", "
     		+ COLUMN_VICTORY	+ ", "
-    		+ COLUMN_DATE		+ " FROM "
-    		+ TABLE_NAME		+ " WHERE "
+    		+ COLUMN_DATE		+ FROM
+    		+ TABLE_NAME		+ WHERE
     		+ COLUMN_DATE		+ " = ?";
-    private static final String SQL_SELECT_TOUS = "SELECT "
+    private static final String SQL_SELECT_TOUS = SELECT
     		+ COLUMN_ID			+ ", "
     		+ COLUMN_PSEUDO		+ ", "
     		+ COLUMN_SCORE		+ ", "
     		+ COLUMN_VICTORY	+ ", "
-    		+ COLUMN_DATE		+ " FROM "
-    		+ TABLE_NAME + " WHERE " + COLUMN_VICTORY + " IS NOT FALSE LIMIT 10";
+    		+ COLUMN_DATE		+ FROM
+    		+ TABLE_NAME 		+ WHERE
+    		+ COLUMN_VICTORY 	+ " IS NOT FALSE LIMIT 10";
     private static final String SQL_DELETE_PAR_ID = "DELETE FROM "
-    		+ TABLE_NAME		+ " WHERE "
+    		+ TABLE_NAME		+ WHERE
     		+ COLUMN_ID			+ " = ?";
     
     public DAOPartieImpl(DAOFactory daoFactory) {
@@ -71,12 +82,9 @@ public class DAOPartieImpl implements DAOPartie {
 	    try {
 	        connexion = daoFactory.getConnection();
 	        preparedStatement = initialisationRequetePreparee(connexion, SQL_CREATE, false);
-	        int statut = preparedStatement.executeUpdate();
-	        if(statut != 0) {
-	            throw new DAOException("Échec de la création de la table partie.");
-	        }
+	        preparedStatement.executeUpdate();
 	    } catch(SQLException e) {
-	        throw new DAOException(e);
+	        ;
 	    } finally {
 	        fermeturesSilencieuses(preparedStatement, connexion);
 	    }

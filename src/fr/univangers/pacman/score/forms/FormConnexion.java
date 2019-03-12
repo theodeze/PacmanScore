@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import fr.univangers.pacman.score.beans.Utilisateur;
+import fr.univangers.pacman.score.dao.DAOException;
 import fr.univangers.pacman.score.dao.DAOUtilisateur;
 
 public class FormConnexion {
@@ -24,18 +25,25 @@ public class FormConnexion {
 	public Utilisateur connecterUtilisateur(HttpServletRequest request) {
 		String identifiant = request.getParameter(CHAMP_IDENTFIANT);
 		String pass = request.getParameter(CHAMP_PASS);
-		Utilisateur utilisateur = daoUtilisateur.trouver(identifiant);
-		if(utilisateur != null) {
-			BCrypt.Result bresultat = BCrypt.verifyer().verify(pass.toCharArray(), utilisateur.getMotDePasse());
-			if(bresultat.verified) {
-				resultat = "Connexion réussie";
+		Utilisateur utilisateur;
+		try {
+			utilisateur = daoUtilisateur.trouver(identifiant);
+			if(utilisateur != null) {
+				BCrypt.Result bresultat = BCrypt.verifyer().verify(pass.toCharArray(), utilisateur.getMotDePasse());
+				if(bresultat.verified) {
+					resultat = "Connexion réussie";
+				} else {
+					resultat = "Connexion échouée";
+					utilisateur = null;
+				}
 			} else {
 				resultat = "Connexion échouée";
 				utilisateur = null;
 			}
-		} else {
-			resultat = "Connexion échouée";
+		} catch (DAOException e) {
+			utilisateur = null;
 		}
+	
 		return utilisateur;
 	}
 }

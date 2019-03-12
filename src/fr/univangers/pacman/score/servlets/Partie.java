@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import fr.univangers.pacman.score.config.InitialisationDaoFactory;
 import fr.univangers.pacman.score.dao.DAOFactory;
 import fr.univangers.pacman.score.dao.DAOPartie;
+import fr.univangers.pacman.score.dao.DAOUtilisateur;
 import fr.univangers.pacman.score.forms.FormPartie;
 
 @WebServlet("/Partie/*")
@@ -21,12 +22,15 @@ public class Partie extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger("Partie Servlet");
     
     private DAOPartie daoPartie;
+    private DAOUtilisateur daoUtilisateur;
 	
     @Override
     public void init() throws ServletException {
     	super.init();
         this.daoPartie = ((DAOFactory) getServletContext().getAttribute(
         		InitialisationDaoFactory.ATT_DAO_FACTORY)).getDaoPartie();
+        this.daoUtilisateur = ((DAOFactory) getServletContext().getAttribute(
+        		InitialisationDaoFactory.ATT_DAO_FACTORY)).getDaoUtilisateur();
     }
     
     private void sendJson(HttpServletResponse response, String json) {
@@ -49,7 +53,7 @@ public class Partie extends HttpServlet {
 
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        FormPartie form = new FormPartie(daoPartie);
+        FormPartie form = new FormPartie(daoPartie, daoUtilisateur);
         
 		String pathInfo = request.getPathInfo();
 
@@ -83,7 +87,7 @@ public class Partie extends HttpServlet {
 
     @Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		FormPartie form = new FormPartie(daoPartie);
+		FormPartie form = new FormPartie(daoPartie, daoUtilisateur);
         sendJson(response, form.post(request));
 	}
 
@@ -94,7 +98,7 @@ public class Partie extends HttpServlet {
 
     @Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        FormPartie form = new FormPartie(daoPartie);
+        FormPartie form = new FormPartie(daoPartie, daoUtilisateur);
 
 		String pathInfo = request.getPathInfo();
 
