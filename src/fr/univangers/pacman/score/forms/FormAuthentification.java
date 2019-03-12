@@ -1,5 +1,7 @@
 package fr.univangers.pacman.score.forms;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.gson.Gson;
@@ -24,6 +26,14 @@ public class FormAuthentification {
         this.daoUtilisateur = daoUtilisateur;
     }
     
+    public String newToken() throws DAOException {
+    	String token;
+    	do {
+    		token = UUID.randomUUID().toString();
+    	} while(daoUtilisateur.trouverToken(token) != null);
+    	return token;
+    }
+    
     public String post(HttpServletRequest request) {
 		String identifiant = request.getParameter(CHAMP_USER);
 		String motDePasse  = request.getParameter(CHAMP_PASS);
@@ -35,7 +45,7 @@ public class FormAuthentification {
 				BCrypt.Result bresultat = BCrypt.verifyer().verify(motDePasse.toCharArray(), utilisateur.getMotDePasse());
 				if(bresultat.verified) {
 					resultat = "Connexion réussie";
-					String stoken = "AA";
+					String stoken = newToken();
 					daoUtilisateur.modifierToken(utilisateur, stoken);
 					token = new Gson().toJson(stoken);
 				} else {
