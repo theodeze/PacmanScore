@@ -1,6 +1,6 @@
 package fr.univangers.pacman.score.dao;
 
-public class DAOException extends RuntimeException {
+public class DAOException extends Exception {
 
 	private static final long serialVersionUID = -2371259972304276718L;
 	

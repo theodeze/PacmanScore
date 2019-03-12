@@ -10,6 +10,7 @@ public class Utilisateur implements Serializable{
 	private String email;
 	private String motDePasse;
 	private String pseudo;
+	private String token;
     private Timestamp dateInscription;
 	
 	public long getId() {
@@ -45,6 +46,13 @@ public class Utilisateur implements Serializable{
 	}
 	public void setDateInscription(Timestamp dateInscription) {
 		this.dateInscription = dateInscription;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 	
 }

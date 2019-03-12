@@ -23,7 +23,7 @@ public class DAOFactory {
 		this.datasource = datasource;
 	}
 	
-	public static DAOFactory getInstance() throws DAOConfigurationException {
+	public static DAOFactory getInstance() {
         Properties properties = new Properties();
         String url;
         String driver;
@@ -61,9 +61,7 @@ public class DAOFactory {
         DataSource datasource = new DataSource();
         datasource.setPoolProperties(p);
         
-        DAOFactory instance = new DAOFactory(datasource);
-
-        return instance;
+        return new DAOFactory(datasource);
 	}
 	
     Connection getConnection() throws SQLException {

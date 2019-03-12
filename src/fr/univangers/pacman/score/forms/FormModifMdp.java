@@ -41,34 +41,33 @@ public class FormModifMdp {
 		String passOld = request.getParameter(CHAMP_PASS_OLD);
 		String pass = request.getParameter(CHAMP_PASS);
 		String conf = request.getParameter(CHAMP_CONF);
-		Utilisateur user = daoUtilisateur.trouver(email);
+		Utilisateur utilisateur = null;
 		try {
-			if(user!=null && verifOldMdp(passOld,user)) {
-				traiterPass(pass, conf, user);
+			utilisateur = daoUtilisateur.trouver(email);
+			if(utilisateur!=null && verifOldMdp(passOld,utilisateur)) {
+				traiterPass(pass, conf, utilisateur);
 				if(erreurs.isEmpty()) {
 					resultat = "Modification réussite";
-					return user;
-					
 				} else {
 					resultat = "Echec modification";
-					return null;
+					utilisateur = null;
 				}
-			}
-			else {
+			} else {
 				resultat = "Echec modification";
-				return null;
+				utilisateur = null;
 			}
 		} catch(DAOException e) {
             resultat = "Échec de la modification : une erreur imprévue est survenue, merci de réessayer dans quelques instants.";
-            return null;
+            utilisateur = null;
 		}
+		return utilisateur;
 	}
 	
 	private boolean verifOldMdp(String pwd, Utilisateur utilisateur) {
 		return BCrypt.verifyer().verify(pwd.toCharArray(), utilisateur.getMotDePasse()).verified;
 	}
 		
-	private void traiterPass(String pass, String conf, Utilisateur utilisateur) {
+	private void traiterPass(String pass, String conf, Utilisateur utilisateur) throws DAOException {
 			try {
 				validationPass(pass, conf);
 			} catch (FormException e) {
