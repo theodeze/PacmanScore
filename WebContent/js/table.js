@@ -3,7 +3,8 @@ function formatVictoire(value, row, index) {
 }
 
 function formatDate(value, row, index) {
-    return moment(value, 'MMM D, YYYY h:m:s a').format('YYYY-MM-DD HH:mm:ss');
+    var date = moment.utc(value, 'MMM D, YYYY h:m:s a');
+    return date.local().format('YYYY-MM-DD HH:mm:ss');
 }
 
 function initTablePer(classname, url, pseudo) {
