@@ -1,12 +1,16 @@
 package fr.univangers.pacman.score.servlets;
 
 import java.io.IOException;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5de89f2824c516c42502e8f52eab2fad7f07c54e
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+<<<<<<< HEAD
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +25,8 @@ import fr.univangers.pacman.score.forms.FormModifEmail;
 import fr.univangers.pacman.score.forms.FormModifMdp;
 import fr.univangers.pacman.score.forms.FormModifPseudo;
 import fr.univangers.pacman.score.forms.FormSuppr;
+=======
+>>>>>>> 5de89f2824c516c42502e8f52eab2fad7f07c54e
 
 /**
  * Servlet implementation class User
@@ -28,6 +34,7 @@ import fr.univangers.pacman.score.forms.FormSuppr;
 @WebServlet("/User")
 public class User extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+<<<<<<< HEAD
     public static final String CONF_DAO_FACTORY = "daofactory";
 	private static final String VUE = "/WEB-INF/jsp/User.jsp";
 	public static final String ATT_SESSION_USER = "sessionUtilisateur";
@@ -36,22 +43,30 @@ public class User extends HttpServlet {
     public static final String ATT_FORM = "form";
     private static final Logger LOGGER = LogManager.getLogger("User Servlet");  
     private DAOUtilisateur daoUser;
+=======
+	private static final String VUE = "/WEB-INF/jsp/User.jsp";
+>>>>>>> 5de89f2824c516c42502e8f52eab2fad7f07c54e
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public User() {
         super();
+<<<<<<< HEAD
     }
 
     @Override
     public void init() throws ServletException{
     	this.daoUser = ( (DAOFactory) getServletContext().getAttribute( CONF_DAO_FACTORY ) ).getDaoUtilisateur();
+=======
+        // TODO Auto-generated constructor stub
+>>>>>>> 5de89f2824c516c42502e8f52eab2fad7f07c54e
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+<<<<<<< HEAD
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	try {
@@ -60,11 +75,18 @@ public class User extends HttpServlet {
     	catch(Exception e) {
     		LOGGER.warn("Échec du chargement de la vue");
     	}
+=======
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+
+>>>>>>> 5de89f2824c516c42502e8f52eab2fad7f07c54e
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+<<<<<<< HEAD
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
     	HttpSession session = request.getSession();
@@ -161,4 +183,11 @@ public class User extends HttpServlet {
         return request.getSession();
         
 	}	
+=======
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+>>>>>>> 5de89f2824c516c42502e8f52eab2fad7f07c54e
 }
